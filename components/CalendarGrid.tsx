@@ -255,7 +255,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
                 ${!isClickable ? 'cursor-default' : 'cursor-pointer'}
                 ${day === null ? 'pointer-events-none' : ''}
                 ${!inRange && !isStart && !isEnd && day && !isPartOfRangeWithNotes(day)
-                  ? theme === 'dark' ? 'text-black hover:bg-white/5' : 'text-black hover:bg-slate-200 hover:bg-opacity-20'
+                  ? theme === 'dark' ? 'text-gray-100 hover:bg-white/5' : 'text-black hover:bg-slate-200 hover:bg-opacity-20'
                   : ''
                 }
                 }
@@ -281,8 +281,8 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
                     </div>
                   )}
 
-                  {/* Day number in black */}
-                  <span className={`relative z-10 font-bold ${(hasNotes(day) || isPartOfRangeWithNotes(day)) ? theme === 'dark' ? 'text-white drop-shadow-lg' : 'text-white drop-shadow-lg' : 'text-black'}`}>
+                  {/* Day number - lighter color for dark background */}
+                  <span className={`relative z-10 font-bold ${(hasNotes(day) || isPartOfRangeWithNotes(day)) ? theme === 'dark' ? 'text-white drop-shadow-lg' : 'text-white drop-shadow-lg' : theme === 'dark' ? 'text-gray-100' : 'text-black'}`}>
                     {day}
                   </span>
                   {(hasNotes(day) || isPartOfRangeWithNotes(day)) && (

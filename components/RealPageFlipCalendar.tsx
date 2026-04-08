@@ -104,7 +104,7 @@ export default function RealPageFlipCalendar() {
         </div>
 
         {/* Main container with calendar and events side by side */}
-        <div className="flex gap-6 items-start justify-start w-full flex-1 overflow-hidden pl-4 sm:pl-8">
+        <div className="flex gap-8 items-stretch justify-start w-full flex-1 overflow-hidden pl-4 sm:pl-8">
           {/* Left: Calendar (75% width) */}
           <div className="flex flex-col gap-6 items-start w-3/4 pt-4 justify-start flex-shrink-0">
             {/* Month Navigation */}
