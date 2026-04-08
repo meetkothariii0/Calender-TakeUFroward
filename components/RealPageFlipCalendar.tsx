@@ -104,7 +104,7 @@ export default function RealPageFlipCalendar() {
         </div>
 
         {/* Main container with calendar and events side by side */}
-        <div className="flex gap-8 items-stretch justify-start w-full flex-1 overflow-hidden pl-4 sm:pl-8">
+        <div className="flex gap-1 items-stretch justify-center w-full flex-1 overflow-hidden pl-0 sm:pl-2">
           {/* Left: Calendar (75% width) */}
           <div className="flex flex-col gap-6 items-start w-3/4 pt-4 justify-start flex-shrink-0">
             {/* Month Navigation */}
@@ -161,7 +161,8 @@ export default function RealPageFlipCalendar() {
           {/* Right: Events List (25% width) */}
           <div 
             className={`rounded-2xl shadow-2xl border-0 backdrop-blur-lg p-6 w-1/4 h-fit sticky top-20 mr-2 sm:mr-4 flex-shrink-0 ${theme === 'dark' ? 'bg-slate-900/30 border border-white/20' : 'bg-garden-cream/30 border border-garden-cream/40'}`}
-          >            <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Events</h3>
+          >
+            <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Events</h3>
             <EventsList 
               key={eventsRefresh}
               monthIndex={currentMonth}
