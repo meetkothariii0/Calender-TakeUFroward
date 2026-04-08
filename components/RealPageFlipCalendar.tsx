@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import CalendarGrid from './CalendarGrid'
 import NotesModal from './NotesModal'
 import EventsList from './EventsList'
-import MiniStats from './MiniStats'
+import DailyHabitLogger from './DailyHabitLogger'
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -344,18 +344,9 @@ export default function RealPageFlipCalendar() {
               />
             </div>
 
-            {/* Mini Stats Panel */}
-            <div
-              style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '0.5px solid rgba(255, 255, 255, 0.12)',
-                borderRadius: '16px',
-                backdropFilter: 'blur(14px)',
-                WebkitBackdropFilter: 'blur(14px)',
-                padding: '12px',
-              }}
-            >
-              <MiniStats monthIndex={currentMonth} theme={theme} />
+            {/* Daily Habit Logger Panel */}
+            <div>
+              <DailyHabitLogger />
             </div>
           </div>
         </div>
