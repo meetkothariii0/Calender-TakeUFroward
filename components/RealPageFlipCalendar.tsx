@@ -1,11 +1,11 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
 import CalendarGrid from './CalendarGrid'
 import NotesModal from './NotesModal'
 import EventsList from './EventsList'
 import DailyHabitLogger from './DailyHabitLogger'
-import AnimatedContent from './AnimatedContent'
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -21,6 +21,10 @@ export default function RealPageFlipCalendar() {
   const [notesEndDate, setNotesEndDate] = useState<number | null>(null)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const [eventsRefresh, setEventsRefresh] = useState(0)
+  
+  const calendarContainerRef = useRef<HTMLDivElement>(null)
+  const eventsRef = useRef<HTMLDivElement>(null)
+  const habitsRef = useRef<HTMLDivElement>(null)
 
   // Initialize theme from localStorage
   useEffect(() => {
@@ -29,6 +33,29 @@ export default function RealPageFlipCalendar() {
       setTheme(savedTheme)
     }
   }, [])
+
+  // Animate containers when month changes
+  useEffect(() => {
+    if (isFlipping && calendarContainerRef.current) {
+      const direction = flipDirection === 'next' ? 1 : -1
+      
+      // Animate out
+      gsap.to([calendarContainerRef.current, eventsRef.current, habitsRef.current], {
+        opacity: 0.3,
+        y: direction * 20,
+        duration: 0.3,
+        ease: 'power2.in'
+      })
+    } else if (!isFlipping && calendarContainerRef.current) {
+      // Animate in
+      gsap.to([calendarContainerRef.current, eventsRef.current, habitsRef.current], {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: 'power2.out'
+      })
+    }
+  }, [isFlipping, flipDirection])
 
   // Save theme preference
   const toggleTheme = () => {
@@ -299,24 +326,12 @@ export default function RealPageFlipCalendar() {
             </div>
 
             {/* Calendar Grid */}
-            <div style={{ marginTop: '8px' }}>
-              <AnimatedContent
-                distance={30}
-                direction="vertical"
-                reverse={false}
-                duration={0.5}
-                ease="power3.out"
-                initialOpacity={0.5}
-                animateOpacity
-                scale={0.98}
-                delay={0}
-              >
-                <CalendarGrid 
-                  onOpenNotesModal={handleOpenNotesModal}
-                  monthIndex={currentMonth}
-                  theme={theme}
-                />
-              </AnimatedContent>
+            <div ref={calendarContainerRef} style={{ marginTop: '8px' }}>
+              <CalendarGrid 
+                onOpenNotesModal={handleOpenNotesModal}
+                monthIndex={currentMonth}
+                theme={theme}
+              />
             </div>
           </div>
 
@@ -333,66 +348,43 @@ export default function RealPageFlipCalendar() {
             }}
           >
             {/* Events Panel */}
-            <AnimatedContent
-              distance={30}
-              direction="horizontal"
-              reverse={true}
-              duration={0.5}
-              ease="power3.out"
-              initialOpacity={0.5}
-              animateOpacity
-              scale={0.98}
-              delay={0.1}
+            <div
+              ref={eventsRef}
+              style={{
+                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+                border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.12)' : '0.5px solid rgba(0, 0, 0, 0.08)',
+                borderRadius: '16px',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                padding: '12px',
+                maxHeight: '350px',
+                overflowY: 'auto',
+              }}
             >
-              <div
+              <h3 
                 style={{
-                  background: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
-                  border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.12)' : '0.5px solid rgba(0, 0, 0, 0.08)',
-                  borderRadius: '16px',
-                  backdropFilter: 'blur(14px)',
-                  WebkitBackdropFilter: 'blur(14px)',
-                  padding: '12px',
-                  maxHeight: '350px',
-                  overflowY: 'auto',
+                  fontSize: '11px',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : '#000000',
+                  marginBottom: '8px',
+                  fontWeight: '600',
                 }}
               >
-                <h3 
-                  style={{
-                    fontSize: '11px',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : '#000000',
-                    marginBottom: '8px',
-                    fontWeight: '600',
-                  }}
-                >
-                  Events
-                </h3>
-                <EventsList 
-                  key={eventsRefresh}
-                  monthIndex={currentMonth}
-                  theme={theme}
-                  onDeleteEvent={() => setEventsRefresh(prev => prev + 1)}
-                />
-              </div>
-            </AnimatedContent>
+                Events
+              </h3>
+              <EventsList 
+                key={eventsRefresh}
+                monthIndex={currentMonth}
+                theme={theme}
+                onDeleteEvent={() => setEventsRefresh(prev => prev + 1)}
+              />
+            </div>
 
             {/* Daily Habit Logger Panel */}
-            <AnimatedContent
-              distance={30}
-              direction="horizontal"
-              reverse={true}
-              duration={0.5}
-              ease="power3.out"
-              initialOpacity={0.5}
-              animateOpacity
-              scale={0.98}
-              delay={0.2}
-            >
-              <div>
-                <DailyHabitLogger theme={theme} />
-              </div>
-            </AnimatedContent>
+            <div ref={habitsRef}>
+              <DailyHabitLogger theme={theme} />
+            </div>
           </div>
         </div>
       </div>
