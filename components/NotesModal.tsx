@@ -105,7 +105,7 @@ export default function NotesModal({
 
   if (!isOpen) return null
 
-  const displayText = endDate ? `${MONTH_NAMES[monthIndex]} ${startDate}–${endDate}` : `${MONTH_NAMES[monthIndex]} ${startDate}`
+  const displayText = endDate ? `${MONTH_NAMES[monthIndex]} ${startDate}-${endDate}` : `${MONTH_NAMES[monthIndex]} ${startDate}`
 
   return (
     <>
@@ -212,6 +212,8 @@ export default function NotesModal({
                 </div>
               </div>
             </div>
+
+          </div>
 
           {/* Footer */}
           <div className={`border-t p-lg flex gap-md justify-end ${theme === 'dark' ? 'border-white/20' : 'border-slate-400/40'}`}>
