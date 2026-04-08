@@ -337,7 +337,7 @@ export default function RealPageFlipCalendar() {
                   fontSize: '11px',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
-                  color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.45)',
+                  color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : '#000000',
                   marginBottom: '8px',
                   fontWeight: '600',
                 }}

@@ -136,7 +136,7 @@ export default function DailyHabitLogger({ theme = 'dark' }: DailyHabitLoggerPro
             fontWeight: '600',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
-            color: theme === 'dark' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.35)',
+            color: theme === 'dark' ? 'rgba(255, 255, 255, 0.4)' : '#000000',
             marginBottom: '4px',
           }}
         >

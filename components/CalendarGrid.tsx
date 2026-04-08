@@ -302,10 +302,10 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           }
           // Today styling
           else if (isToday) {
-            cellBorder = '1.5px solid rgba(255,255,255,0.3)'
+            cellBorder = theme === 'dark' ? '1.5px solid rgba(255,255,255,0.3)' : '1.5px solid rgba(0,0,0,0.3)'
           } else {
             // Default grid border for all cells
-            cellBorder = '1px solid rgba(255,255,255,0.1)'
+            cellBorder = theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.2)'
           }
 
           return (
