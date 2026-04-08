@@ -102,11 +102,11 @@ export default function RealPageFlipCalendar() {
         </button>
 
         {/* Main container with calendar and events side by side */}
-        <div className="flex gap-8 items-start justify-center w-full max-w-6xl">
-          {/* Left: Calendar */}
-          <div className="flex flex-col gap-4 items-center">
+        <div className="flex gap-6 items-start justify-center w-full h-screen max-w-full">
+          {/* Left: Calendar (75% width) */}
+          <div className="flex flex-col gap-4 items-center w-3/4 h-full pt-12 justify-start">
             {/* Month Navigation */}
-            <div className={`flex items-center justify-between gap-4 backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-6 py-3 rounded-full shadow-xl w-96`}>
+            <div className={`flex items-center justify-between gap-4 backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-8 py-4 rounded-full shadow-xl`}>
               <button
                 onClick={handlePrevMonth}
                 disabled={isFlipping}
@@ -114,7 +114,7 @@ export default function RealPageFlipCalendar() {
               >
                 ←
               </button>
-              <h2 className={`text-3xl font-serif flex-1 text-center drop-shadow-lg min-w-max ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{MONTHS[currentMonth]}</h2>
+              <h2 className={`text-4xl font-serif flex-1 text-center drop-shadow-lg min-w-max ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{MONTHS[currentMonth]}</h2>
               <button
                 onClick={handleNextMonth}
                 disabled={isFlipping}
@@ -126,7 +126,7 @@ export default function RealPageFlipCalendar() {
 
             {/* Calendar with glass blur effect */}
             <div
-              className={`rounded-2xl shadow-2xl overflow-hidden ${isFlipping ? `flip-${flipDirection}` : ''} border-0 w-96`}
+              className={`rounded-2xl shadow-2xl overflow-hidden ${isFlipping ? `flip-${flipDirection}` : ''} border-0`}
               style={{
                 transformStyle: 'preserve-3d' as any,
                 transform: isFlipping
@@ -156,10 +156,11 @@ export default function RealPageFlipCalendar() {
             </div>
           </div>
 
-          {/* Right: Events List */}
+          {/* Right: Events List (25% width) */}
           <div 
-            className={`rounded-2xl shadow-2xl border-0 backdrop-blur-lg p-6 w-80 h-fit ${theme === 'dark' ? 'bg-slate-900/30 border border-white/20' : 'bg-garden-cream/30 border border-garden-cream/40'}`}
+            className={`rounded-2xl shadow-2xl border-0 backdrop-blur-lg p-6 w-1/4 h-fit sticky top-12 ${theme === 'dark' ? 'bg-slate-900/30 border border-white/20' : 'bg-garden-cream/30 border border-garden-cream/40'}`}
           >
+            <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Events</h3>
             <EventsList 
               key={eventsRefresh}
               monthIndex={currentMonth}
