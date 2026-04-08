@@ -191,7 +191,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
       {startDate && (
         <div 
           style={{
-            marginBottom: '8px',
+            marginBottom: '4px',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
@@ -200,7 +200,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
         >
           <span 
             style={{
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: '500',
               color: theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
             }}
@@ -213,14 +213,14 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           <button
             onClick={handleAddNotesClick}
             style={{
-              padding: '8px 12px',
-              borderRadius: '8px',
+              padding: '6px 10px',
+              borderRadius: '6px',
               background: theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)',
               border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.3)' : '0.5px solid rgba(0, 0, 0, 0.15)',
               cursor: 'pointer',
               color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.75)',
               fontWeight: '600',
-              fontSize: '13px',
+              fontSize: '11px',
               transition: 'all 0.2s',
               display: 'flex',
               alignItems: 'center',
@@ -245,8 +245,8 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
-          gap: '8px',
-          marginBottom: '12px',
+          gap: '0px',
+          marginBottom: '6px',
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -261,7 +261,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
               textTransform: 'uppercase',
               textAlign: 'center',
               fontWeight: '600',
-              paddingBottom: '8px',
+              paddingBottom: '4px',
             }}
           >
             {day}
@@ -383,8 +383,8 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
       {/* Info text */}
       <div 
         style={{
-          marginTop: '6px',
-          fontSize: '12px',
+          marginTop: '2px',
+          fontSize: '11px',
           fontStyle: 'italic',
           color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.45)',
           textAlign: 'center',

@@ -165,13 +165,13 @@ export default function RealPageFlipCalendar() {
       <div 
         className="relative z-20 w-full h-full flex flex-col"
         style={{
-          padding: '20px',
+          padding: '12px',
           display: 'flex',
           flexDirection: 'column',
         }}
       >
         {/* Theme Toggle - Top Right */}
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end mb-2">
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
@@ -202,10 +202,10 @@ export default function RealPageFlipCalendar() {
 
         {/* Main Content Grid - Calendar + Sidebar */}
         <div 
-          className="flex gap-4 w-full flex-1"
+          className="flex gap-2 w-full flex-1"
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 260px',
+            gridTemplateColumns: '1fr 240px',
             alignItems: 'stretch',
             height: '100%',
             overflow: 'hidden',
@@ -222,7 +222,7 @@ export default function RealPageFlipCalendar() {
               borderRadius: '16px',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
-              padding: '60px 24px 24px 24px',
+              padding: '50px 16px 12px 16px',
               transform: isFlipping
                 ? flipDirection === 'next'
                   ? 'rotateY(-90deg) translateZ(50px)'
@@ -234,7 +234,7 @@ export default function RealPageFlipCalendar() {
               display: 'flex',
               flexDirection: 'column',
               height: '100%',
-              overflowY: 'auto',
+              overflowY: 'hidden',
             }}
           >
             {/* Month Navigation - Top Center of Calendar */}
@@ -362,7 +362,7 @@ export default function RealPageFlipCalendar() {
                 backdropFilter: 'blur(14px)',
                 WebkitBackdropFilter: 'blur(14px)',
                 padding: '12px',
-                maxHeight: '350px',
+                maxHeight: '280px',
                 overflowY: 'auto',
               }}
             >
