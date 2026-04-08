@@ -205,7 +205,7 @@ export default function RealPageFlipCalendar() {
           className="flex gap-2 w-full flex-1"
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 260px',
+            gridTemplateColumns: '1fr 300px',
             alignItems: 'stretch',
             height: '100%',
             overflow: 'hidden',
