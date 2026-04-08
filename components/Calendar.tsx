@@ -158,9 +158,8 @@ export default function Calendar() {
 
       {/* Main Content - Grid Layout */}
       <div 
-        className="relative z-20 w-full h-full flex flex-col"
+        className="relative z-20 w-full h-full flex flex-col px-2 md:px-3"
         style={{
-          padding: window.innerWidth < 768 ? '8px' : '12px',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -197,15 +196,15 @@ export default function Calendar() {
 
         {/* Main Content Grid - Calendar + Sidebar */}
         <div 
-          className="flex gap-2 w-full flex-1"
+          className="flex gap-2 w-full flex-1 max-w-full"
           style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth < 768 ? '1fr' : window.innerWidth < 1024 ? '1fr 250px' : '1fr 300px',
-            gridTemplateRows: window.innerWidth < 768 ? 'auto 1fr' : 'auto',
+            gridTemplateColumns: 'minmax(0, 1fr) minmax(250px, 300px)',
+            gridTemplateRows: 'auto',
             alignItems: 'stretch',
             height: '100%',
             overflow: 'hidden',
-            gap: window.innerWidth < 768 ? '8px' : '4px',
+            gap: '4px',
           }}
         >
           {/* Left Column - Calendar */}
@@ -219,7 +218,7 @@ export default function Calendar() {
               borderRadius: '16px',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
-              padding: window.innerWidth < 768 ? '60px 8px 8px 8px' : '60px 12px 8px 12px',
+              padding: '60px 12px 8px 12px',
               display: 'flex',
               flexDirection: 'column',
               height: '100%',
