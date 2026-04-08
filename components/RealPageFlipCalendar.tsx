@@ -234,7 +234,7 @@ export default function RealPageFlipCalendar() {
               display: 'flex',
               flexDirection: 'column',
               height: '90%',
-              overflowY: 'hidden',
+              overflowY: 'auto',
             }}
           >
             {/* Month Navigation - Top Center of Calendar */}
