@@ -205,7 +205,7 @@ export default function RealPageFlipCalendar() {
           className="flex gap-2 w-full flex-1"
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 240px',
+            gridTemplateColumns: '1fr 260px',
             alignItems: 'stretch',
             height: '100%',
             overflow: 'hidden',
@@ -233,7 +233,7 @@ export default function RealPageFlipCalendar() {
               transformStyle: 'preserve-3d' as any,
               display: 'flex',
               flexDirection: 'column',
-              height: '100%',
+              height: '80%',
               overflowY: 'hidden',
             }}
           >
