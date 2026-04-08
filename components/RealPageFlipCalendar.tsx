@@ -233,7 +233,7 @@ export default function RealPageFlipCalendar() {
               transformStyle: 'preserve-3d' as any,
               display: 'flex',
               flexDirection: 'column',
-              height: '80%',
+              height: '90%',
               overflowY: 'hidden',
             }}
           >
