@@ -5,6 +5,7 @@ import CalendarGrid from './CalendarGrid'
 import NotesModal from './NotesModal'
 import EventsList from './EventsList'
 import DailyHabitLogger from './DailyHabitLogger'
+import Beams from './Beams'
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -75,65 +76,95 @@ export default function RealPageFlipCalendar() {
       className="relative w-full h-screen overflow-hidden"
       style={{
         background: theme === 'dark' 
-          ? 'linear-gradient(135deg, #0d0b1e 0%, #1a103a 40%, #0b1a2e 70%, #0e1f1a 100%)'
+          ? '#000000'
           : '#ffffff',
       }}
     >
-      {/* Decorative Orbs */}
-      {/* Orb 1: Purple, top-left */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          width: '260px',
-          height: '260px',
-          background: '#5b21b6',
-          borderRadius: '50%',
-          filter: 'blur(60px)',
-          opacity: 0.35,
-          top: '-80px',
-          left: '-80px',
-          zIndex: 1,
-        }}
-      />
-      {/* Orb 2: Teal, bottom-right */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          width: '200px',
-          height: '200px',
-          background: '#0e7490',
-          borderRadius: '50%',
-          filter: 'blur(60px)',
-          opacity: 0.35,
-          bottom: '-60px',
-          right: '-60px',
-          zIndex: 1,
-        }}
-      />
-      {/* Orb 3: Violet, center */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          width: '140px',
-          height: '140px',
-          background: '#7c3aed',
-          borderRadius: '50%',
-          filter: 'blur(60px)',
-          opacity: 0.35,
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 1,
-        }}
-      />
+      {/* Beams Background - Dark Mode Only */}
+      {theme === 'dark' && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 5,
+          pointerEvents: 'none',
+        }}>
+          <Beams
+            beamWidth={3}
+            beamHeight={30}
+            beamNumber={20}
+            lightColor="#ffffff"
+            speed={2}
+            noiseIntensity={1.75}
+            scale={0.2}
+            rotation={30}
+          />
+        </div>
+      )}
+
+      {/* Decorative Orbs - Light Mode Only */}
+      {theme === 'light' && (
+        <>
+          {/* Orb 1: Purple, top-left */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              width: '260px',
+              height: '260px',
+              background: '#5b21b6',
+              borderRadius: '50%',
+              filter: 'blur(60px)',
+              opacity: 0.35,
+              top: '-80px',
+              left: '-80px',
+              zIndex: 1,
+            }}
+          />
+          {/* Orb 2: Teal, bottom-right */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              width: '200px',
+              height: '200px',
+              background: '#0e7490',
+              borderRadius: '50%',
+              filter: 'blur(60px)',
+              opacity: 0.35,
+              bottom: '-60px',
+              right: '-60px',
+              zIndex: 1,
+            }}
+          />
+          {/* Orb 3: Violet, center */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              width: '140px',
+              height: '140px',
+              background: '#7c3aed',
+              borderRadius: '50%',
+              filter: 'blur(60px)',
+              opacity: 0.35,
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 1,
+            }}
+          />
+        </>
+      )}
 
       {/* Main Content - Grid Layout */}
       <div 
-        className="relative z-20 w-full h-full flex flex-col"
+        className="relative w-full h-full flex flex-col"
         style={{
           padding: '20px',
           display: 'flex',
           flexDirection: 'column',
+          zIndex: 10,
+          position: 'relative',
         }}
       >
         {/* Theme Toggle - Top Right */}
