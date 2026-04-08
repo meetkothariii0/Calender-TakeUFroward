@@ -133,7 +133,7 @@ export default function RealPageFlipCalendar() {
           gridTemplateRows: 'auto 1fr',
           gridTemplateColumns: '1fr',
           gap: '24px',
-          padding: '24px',
+          padding: '48px',
         }}
       >
         {/* Top Bar - Month Navigation & Theme Toggle */}
@@ -275,7 +275,7 @@ export default function RealPageFlipCalendar() {
               borderRadius: '16px',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
-              padding: '24px',
+              padding: '48px',
               transform: isFlipping
                 ? flipDirection === 'next'
                   ? 'rotateY(-90deg) translateZ(50px)'
@@ -366,3 +366,4 @@ export default function RealPageFlipCalendar() {
     </div>
   )
 }
+
