@@ -274,7 +274,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
-          gap: '8px',
+          gap: '0px',
         }}
       >
         {calendarDays.map((day, index) => {
@@ -303,6 +303,9 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           // Today styling
           else if (isToday) {
             cellBorder = '1.5px solid rgba(255,255,255,0.3)'
+          } else {
+            // Default grid border for all cells
+            cellBorder = '1px solid rgba(255,255,255,0.1)'
           }
 
           return (
@@ -360,12 +363,12 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
                     <div
                       style={{
                         position: 'absolute',
-                        width: '6px',
-                        height: '6px',
+                        width: '10px',
+                        height: '10px',
                         borderRadius: '50%',
                         backgroundColor: COLOR_DOT_MAPPINGS[eventColor] || COLOR_DOT_MAPPINGS['cyan'],
-                        bottom: '4px',
-                        right: '4px',
+                        bottom: '2px',
+                        right: '2px',
                         zIndex: 11,
                       }}
                     />
