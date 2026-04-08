@@ -266,15 +266,14 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
                   {/* Colored gradient circle only for dates with notes - excluding TODAY */}
                   {(hasNotes(day) || isPartOfRangeWithNotes(day)) && day !== TODAY && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      {/* Outer rotating ring */}
+                      {/* Filled circle background */}
                       <div 
-                        className="absolute rounded-full animate-spin"
+                        className="absolute rounded-full"
                         style={{
-                          width: 'calc(100% - 2px)',
-                          height: 'calc(100% - 2px)',
-                          animationDuration: '4s',
+                          width: '100%',
+                          height: '100%',
                           backgroundImage: getGradientStyle(getColorForDate(day)),
-                          opacity: 0.8,
+                          opacity: 0.85,
                           borderRadius: '50%'
                         }}
                       />

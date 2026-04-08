@@ -160,9 +160,8 @@ export default function RealPageFlipCalendar() {
 
           {/* Right: Events List (25% width) */}
           <div 
-            className={`rounded-2xl shadow-2xl border-0 backdrop-blur-lg p-6 w-1/4 h-fit sticky top-20 mr-4 sm:mr-8 flex-shrink-0 ${theme === 'dark' ? 'bg-slate-900/30 border border-white/20' : 'bg-garden-cream/30 border border-garden-cream/40'}`}
-          >
-            <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Events</h3>
+            className={`rounded-2xl shadow-2xl border-0 backdrop-blur-lg p-6 w-1/4 h-fit sticky top-20 mr-2 sm:mr-4 flex-shrink-0 ${theme === 'dark' ? 'bg-slate-900/30 border border-white/20' : 'bg-garden-cream/30 border border-garden-cream/40'}`}
+          >            <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Events</h3>
             <EventsList 
               key={eventsRefresh}
               monthIndex={currentMonth}
