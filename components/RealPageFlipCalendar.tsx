@@ -222,7 +222,7 @@ export default function RealPageFlipCalendar() {
               borderRadius: '16px',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
-              padding: '40px 12px 8px 12px',
+              padding: '60px 12px 8px 12px',
               transform: isFlipping
                 ? flipDirection === 'next'
                   ? 'rotateY(-90deg) translateZ(50px)'
