@@ -191,16 +191,16 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
       {startDate && (
         <div 
           style={{
-            marginBottom: '4px',
+            marginBottom: '2px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
+            gap: '6px',
             flexWrap: 'wrap',
           }}
         >
           <span 
             style={{
-              fontSize: '12px',
+              fontSize: '10px',
               fontWeight: '500',
               color: theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
             }}
@@ -213,14 +213,14 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           <button
             onClick={handleAddNotesClick}
             style={{
-              padding: '6px 10px',
-              borderRadius: '6px',
+              padding: '4px 8px',
+              borderRadius: '4px',
               background: theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)',
               border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.3)' : '0.5px solid rgba(0, 0, 0, 0.15)',
               cursor: 'pointer',
               color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.75)',
               fontWeight: '600',
-              fontSize: '11px',
+              fontSize: '9px',
               transition: 'all 0.2s',
               display: 'flex',
               alignItems: 'center',
@@ -246,7 +246,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
           gap: '0px',
-          marginBottom: '6px',
+          marginBottom: '2px',
         }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -383,8 +383,8 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
       {/* Info text */}
       <div 
         style={{
-          marginTop: '2px',
-          fontSize: '11px',
+          marginTop: '1px',
+          fontSize: '9px',
           fontStyle: 'italic',
           color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.45)',
           textAlign: 'center',
