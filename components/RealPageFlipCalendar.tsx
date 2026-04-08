@@ -5,6 +5,7 @@ import CalendarGrid from './CalendarGrid'
 import NotesModal from './NotesModal'
 import EventsList from './EventsList'
 import DailyHabitLogger from './DailyHabitLogger'
+import AnimatedContent from './AnimatedContent'
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -299,11 +300,25 @@ export default function RealPageFlipCalendar() {
 
             {/* Calendar Grid */}
             <div style={{ marginTop: '8px' }}>
-              <CalendarGrid 
-                onOpenNotesModal={handleOpenNotesModal}
-                monthIndex={currentMonth}
-                theme={theme}
-              />
+              <AnimatedContent
+                distance={40}
+                direction="vertical"
+                reverse={false}
+                duration={0.6}
+                ease="power3.out"
+                initialOpacity={0.3}
+                animateOpacity
+                scale={0.95}
+                threshold={0.1}
+                delay={0.1}
+                key={currentMonth}
+              >
+                <CalendarGrid 
+                  onOpenNotesModal={handleOpenNotesModal}
+                  monthIndex={currentMonth}
+                  theme={theme}
+                />
+              </AnimatedContent>
             </div>
           </div>
 
@@ -320,42 +335,70 @@ export default function RealPageFlipCalendar() {
             }}
           >
             {/* Events Panel */}
-            <div
-              style={{
-                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
-                border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.12)' : '0.5px solid rgba(0, 0, 0, 0.08)',
-                borderRadius: '16px',
-                backdropFilter: 'blur(14px)',
-                WebkitBackdropFilter: 'blur(14px)',
-                padding: '12px',
-                maxHeight: '350px',
-                overflowY: 'auto',
-              }}
+            <AnimatedContent
+              distance={40}
+              direction="horizontal"
+              reverse={true}
+              duration={0.6}
+              ease="power3.out"
+              initialOpacity={0.3}
+              animateOpacity
+              scale={0.95}
+              threshold={0.1}
+              delay={0.2}
+              key={`events-${currentMonth}`}
             >
-              <h3 
+              <div
                 style={{
-                  fontSize: '11px',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : '#000000',
-                  marginBottom: '8px',
-                  fontWeight: '600',
+                  background: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+                  border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.12)' : '0.5px solid rgba(0, 0, 0, 0.08)',
+                  borderRadius: '16px',
+                  backdropFilter: 'blur(14px)',
+                  WebkitBackdropFilter: 'blur(14px)',
+                  padding: '12px',
+                  maxHeight: '350px',
+                  overflowY: 'auto',
                 }}
               >
-                Events
-              </h3>
-              <EventsList 
-                key={eventsRefresh}
-                monthIndex={currentMonth}
-                theme={theme}
-                onDeleteEvent={() => setEventsRefresh(prev => prev + 1)}
-              />
-            </div>
+                <h3 
+                  style={{
+                    fontSize: '11px',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : '#000000',
+                    marginBottom: '8px',
+                    fontWeight: '600',
+                  }}
+                >
+                  Events
+                </h3>
+                <EventsList 
+                  key={eventsRefresh}
+                  monthIndex={currentMonth}
+                  theme={theme}
+                  onDeleteEvent={() => setEventsRefresh(prev => prev + 1)}
+                />
+              </div>
+            </AnimatedContent>
 
             {/* Daily Habit Logger Panel */}
-            <div>
-              <DailyHabitLogger theme={theme} />
-            </div>
+            <AnimatedContent
+              distance={40}
+              direction="horizontal"
+              reverse={true}
+              duration={0.6}
+              ease="power3.out"
+              initialOpacity={0.3}
+              animateOpacity
+              scale={0.95}
+              threshold={0.1}
+              delay={0.3}
+              key={`habits-${currentMonth}`}
+            >
+              <div>
+                <DailyHabitLogger theme={theme} />
+              </div>
+            </AnimatedContent>
           </div>
         </div>
       </div>
