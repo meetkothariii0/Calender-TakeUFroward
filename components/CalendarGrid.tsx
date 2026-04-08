@@ -19,11 +19,34 @@ interface CalendarGridProps {
   theme?: 'dark' | 'light'
 }
 
+const COLOR_MAPPINGS: { [key: string]: string } = {
+  'red': 'rgba(220, 60, 70, 0.5)',
+  'orange': 'rgba(249, 115, 22, 0.5)',
+  'blue': 'rgba(59, 130, 246, 0.5)',
+  'green': 'rgba(34, 197, 94, 0.5)',
+  'purple': 'rgba(168, 85, 247, 0.5)',
+  'pink': 'rgba(236, 72, 153, 0.5)',
+  'yellow': 'rgba(234, 179, 8, 0.5)',
+  'cyan': 'rgba(6, 182, 212, 0.5)',
+}
+
+const COLOR_DOT_MAPPINGS: { [key: string]: string } = {
+  'red': '#dc2626',
+  'orange': '#ea580c',
+  'blue': '#1d4ed8',
+  'green': '#15803d',
+  'purple': '#7e22ce',
+  'pink': '#be185d',
+  'yellow': '#ca8a04',
+  'cyan': '#0891b2',
+}
+
 export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'dark' }: CalendarGridProps) {
   const [startDate, setStartDate] = useState<number | null>(null)
   const [endDate, setEndDate] = useState<number | null>(null)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const [previewColor, setPreviewColor] = useState<string>('cyan')
 
   // Reset selection when month changes
   useEffect(() => {
@@ -56,6 +79,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
     if (startDate === null) {
       setStartDate(day)
       setEndDate(null)
+      setPreviewColor('cyan')
     } else if (endDate === null) {
       if (day >= startDate) {
         setEndDate(day)
@@ -66,6 +90,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
     } else {
       setStartDate(day)
       setEndDate(null)
+      setPreviewColor('cyan')
     }
   }
 
@@ -257,7 +282,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           const range = day ? isPartOfRangeWithNotes(day) : null
           const rangePosition = getRangePosition(day, range)
           const hasEventNote = day ? (hasNotes(day) || range !== null) : false
-          const eventColor = day ? getColorForDate(day) : 'cyan'
+          const eventColor = hasEventNote ? (day ? getColorForDate(day) : 'cyan') : previewColor
           const isToday = day === TODAY
           const inSelection = day ? isInRange(day) : false
           const isStartSelection = day ? isStartDate(day) : false
@@ -269,25 +294,11 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           let cellColor = 'rgba(255,255,255,0.65)'
           let cellBorderRadius = '10px'
 
-          // Multi-day range styling
-          if (hasEventNote && range && range.start !== range.end) {
-            cellBackground = 'rgba(220, 60, 70, 0.72)'
-            cellColor = 'white'
-            cellBorder = '0.5px solid rgba(255,120,120,0.35)'
-            
-            if (rangePosition === 'start') {
-              cellBorderRadius = '10px 4px 4px 10px'
-            } else if (rangePosition === 'middle') {
-              cellBorderRadius = '2px'
-            } else if (rangePosition === 'end') {
-              cellBorderRadius = '4px 10px 10px 4px'
-            }
-          }
-          // Single event day styling
-          else if (hasEventNote && !range) {
-            cellBackground = 'rgba(14, 116, 144, 0.55)'
-            cellColor = '#a5f3fc'
-            cellBorder = '0.5px solid rgba(94, 234, 212, 0.3)'
+          // Selection styling with colored backgrounds
+          if (inSelection && !hasEventNote) {
+            cellBackground = COLOR_MAPPINGS[eventColor] || COLOR_MAPPINGS['cyan']
+            cellBorder = `1px solid ${COLOR_DOT_MAPPINGS[eventColor] || COLOR_DOT_MAPPINGS['cyan']}`
+            cellColor = 'rgba(255,255,255,0.8)'
           }
           // Today styling
           else if (isToday) {
@@ -343,6 +354,22 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
                   >
                     {day}
                   </span>
+
+                  {/* Indicator dot for dates with notes */}
+                  {hasEventNote && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        width: '6px',
+                        height: '6px',
+                        borderRadius: '50%',
+                        backgroundColor: COLOR_DOT_MAPPINGS[eventColor] || COLOR_DOT_MAPPINGS['cyan'],
+                        bottom: '4px',
+                        right: '4px',
+                        zIndex: 11,
+                      }}
+                    />
+                  )}
                 </>
               )}
             </button>
