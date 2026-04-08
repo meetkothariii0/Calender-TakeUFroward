@@ -16,28 +16,14 @@ const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'Ju
 interface CalendarGridProps {
   onOpenNotesModal: (startDate: number, endDate: number | null) => void
   monthIndex: number
-  seasonalColors?: {
-    button: string
-    text: string
-    highlight: string
-    accent: string
-  }
   theme?: 'dark' | 'light'
 }
 
-export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalColors, theme = 'dark' }: CalendarGridProps) {
+export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'dark' }: CalendarGridProps) {
   const [startDate, setStartDate] = useState<number | null>(null)
   const [endDate, setEndDate] = useState<number | null>(null)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
-
-  // Default seasonal colors if not provided
-  const colors = seasonalColors || {
-    button: 'bg-slate-500/80 hover:bg-slate-400 text-white',
-    text: 'text-slate-700',
-    highlight: 'bg-slate-500 text-white',
-    accent: 'bg-slate-500',
-  }
 
   // Reset selection when month changes
   useEffect(() => {
@@ -96,7 +82,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
 
   const isStartDate = (day: number) => day === startDate
   const isEndDate = (day: number) => day === endDate
-  
+
   const hasNotes = (day: number): boolean => {
     if (typeof window === 'undefined') return false
     const key = `notes-${monthIndex}-${day}`
@@ -108,7 +94,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
   const getDateRangesWithNotes = (): Array<{startDate: number, endDate: number}> => {
     if (typeof window === 'undefined') return []
     const ranges: Array<{startDate: number, endDate: number}> = []
-    
+
     for (let i = 1; i <= DAYS_IN_MONTH[monthIndex]; i++) {
       for (let j = i; j <= DAYS_IN_MONTH[monthIndex]; j++) {
         const rangeKey = `notes-${monthIndex}-${i}-${j}`
@@ -137,7 +123,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
     const range = isPartOfRangeWithNotes(day)
     if (range) {
       const colorKey = `color-${monthIndex}-${range.start}-${range.end}`
-      return localStorage.getItem(colorKey) || 'cyan'
+      return localStorage.getItem(colorKey) || 'red'
     } else if (hasNotes(day)) {
       const colorKey = `color-${monthIndex}-${day}`
       return localStorage.getItem(colorKey) || 'cyan'
@@ -156,20 +142,13 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
     }
   }
 
-  // Get gradient colors based on color name
-  const getGradientStyle = (colorName: string): string => {
-    const colorMap: {[key: string]: {light: string, bright: string}} = {
-      'red': { light: '#ef4444', bright: '#dc2626' },
-      'orange': { light: '#f97316', bright: '#ea580c' },
-      'blue': { light: '#3b82f6', bright: '#1d4ed8' },
-      'green': { light: '#22c55e', bright: '#15803d' },
-      'purple': { light: '#a855f7', bright: '#7e22ce' },
-      'pink': { light: '#ec4899', bright: '#be185d' },
-      'yellow': { light: '#eab308', bright: '#ca8a04' },
-      'cyan': { light: '#06b6d4', bright: '#0891b2' },
-    }
-    const color = colorMap[colorName] || colorMap['cyan']
-    return `linear-gradient(to right, ${color.light} 0%, ${color.bright} 100%)`
+  // Determine position in range (start, middle, or end)
+  const getRangePosition = (day: number, range: {start: number, end: number} | null): 'start' | 'middle' | 'end' | null => {
+    if (!range) return null
+    if (range.start === range.end) return null // Single day
+    if (day === range.start) return 'start'
+    if (day === range.end) return 'end'
+    return 'middle'
   }
 
   // Handle touch events for swipe detection
@@ -181,31 +160,26 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
     setTouchEnd(e.changedTouches[0].clientX)
   }
 
-  useEffect(() => {
-    if (!touchStart || !touchEnd) return
-    const distance = touchStart - touchEnd
-    const isLeftSwipe = distance > 50
-    const isRightSwipe = distance < -50
-
-    if (isLeftSwipe) {
-      // Swiped left - go to next month
-      // Parent component (WallCalendar) should handle this
-    } else if (isRightSwipe) {
-      // Swiped right - go to previous month
-      // Parent component (WallCalendar) should handle this
-    }
-  }, [touchStart, touchEnd])
-
   return (
-    <div 
-      className={`w-full bg-transparent p-sm sm:p-md md:p-lg lg:p-xl`}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
+    <div style={{ width: '100%' }}>
       {/* Selection indicator with notes button */}
       {startDate && (
-        <div className="mb-md sm:mb-lg flex items-center gap-md flex-wrap">
-          <span className={`text-xs sm:text-sm font-sans whitespace-nowrap ${theme === 'dark' ? 'text-white' : colors.text}`}>
+        <div 
+          style={{
+            marginBottom: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <span 
+            style={{
+              fontSize: '14px',
+              fontWeight: '500',
+              color: 'rgba(255, 255, 255, 0.8)',
+            }}
+          >
             {endDate 
               ? `${MONTH_NAMES[monthIndex]} ${startDate}–${endDate}` 
               : `${MONTH_NAMES[monthIndex]} ${startDate}`
@@ -213,85 +187,162 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
           </span>
           <button
             onClick={handleAddNotesClick}
-            className={`p-md rounded-lg ${theme === 'dark' ? 'bg-white/80 text-slate-900 hover:bg-white' : `${colors.accent} text-white hover:opacity-90`} transition-all transform hover:scale-110 font-semibold`}
+            style={{
+              padding: '8px 12px',
+              borderRadius: '8px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: '0.5px solid rgba(255, 255, 255, 0.3)',
+              cursor: 'pointer',
+              color: 'rgba(255, 255, 255, 0.9)',
+              fontWeight: '600',
+              fontSize: '13px',
+              transition: 'all 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+            onMouseEnter={(e) => {
+              (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.3)'
+            }}
+            onMouseLeave={(e) => {
+              (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.2)'
+            }}
             title="Add notes"
-            aria-label="Add notes for selected dates"
           >
-            <Plus className="w-4 h-4" />
+            <Plus size={14} />
+            Add notes
           </button>
         </div>
       )}
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 gap-3 mb-3">
+      <div 
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(7, 1fr)',
+          gap: '12px',
+          marginBottom: '12px',
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {DAYS_OF_WEEK.map((day) => (
           <div
             key={day}
-            className={`h-20 w-20 flex items-center justify-center text-xs sm:text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}
+            style={{
+              fontSize: '11px',
+              letterSpacing: '0.08em',
+              color: 'rgba(255,255,255,0.38)',
+              textTransform: 'uppercase',
+              textAlign: 'center',
+              fontWeight: '600',
+              paddingBottom: '8px',
+            }}
           >
-            <span className="relative z-10">{day}</span>
+            {day}
           </div>
         ))}
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-3">
+      <div 
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(7, 1fr)',
+          gap: '12px',
+        }}
+      >
         {calendarDays.map((day, index) => {
-          const isWeekend = index % 7 >= 5
-          const isToday = day === TODAY
-          const inRange = day ? isInRange(day) : false
-          const isStart = day ? isStartDate(day) : false
-          const isEnd = day ? isEndDate(day) : false
           const isClickable = day !== null
+          const range = day ? isPartOfRangeWithNotes(day) : null
+          const rangePosition = getRangePosition(day, range)
+          const hasEventNote = day ? (hasNotes(day) || range !== null) : false
+          const eventColor = day ? getColorForDate(day) : 'cyan'
+          const isToday = day === TODAY
+          const inSelection = day ? isInRange(day) : false
+          const isStartSelection = day ? isStartDate(day) : false
+          const isEndSelection = day ? isEndDate(day) : false
+
+
+          let cellBackground = 'transparent'
+          let cellBorder = '0.5px solid transparent'
+          let cellColor = 'rgba(255,255,255,0.65)'
+          let cellBorderRadius = '10px'
+
+          // Multi-day range styling
+          if (hasEventNote && range && range.start !== range.end) {
+            cellBackground = 'rgba(220, 60, 70, 0.72)'
+            cellColor = 'white'
+            cellBorder = '0.5px solid rgba(255,120,120,0.35)'
+            
+            if (rangePosition === 'start') {
+              cellBorderRadius = '10px 4px 4px 10px'
+            } else if (rangePosition === 'middle') {
+              cellBorderRadius = '2px'
+            } else if (rangePosition === 'end') {
+              cellBorderRadius = '4px 10px 10px 4px'
+            }
+          }
+          // Single event day styling
+          else if (hasEventNote && !range) {
+            cellBackground = 'rgba(14, 116, 144, 0.55)'
+            cellColor = '#a5f3fc'
+            cellBorder = '0.5px solid rgba(94, 234, 212, 0.3)'
+          }
+          // Today styling
+          else if (isToday) {
+            cellBorder = '1.5px solid rgba(255,255,255,0.3)'
+          }
 
           return (
             <button
               key={index}
               onClick={() => day && handleDateClick(day)}
               disabled={!isClickable}
-              className={`
-                h-20 w-20 flex items-center justify-center relative rounded text-sm font-bold
-                transition-all duration-quick bg-transparent border-0 outline-none
-                ${!isClickable ? 'cursor-default' : 'cursor-pointer'}
-                ${day === null ? 'pointer-events-none' : ''}
-                ${!inRange && !isStart && !isEnd && day && !isPartOfRangeWithNotes(day)
-                  ? theme === 'dark' ? 'text-gray-100 hover:bg-white/5' : 'text-black hover:bg-slate-200 hover:bg-opacity-20'
-                  : ''
+              style={{
+                aspectRatio: '1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: cellColor,
+                background: cellBackground,
+                border: cellBorder,
+                borderRadius: cellBorderRadius,
+                cursor: isClickable ? 'pointer' : 'default',
+                opacity: isClickable ? 1 : 0,
+                transition: 'all 0.15s',
+                outline: 'none',
+                position: 'relative',
+              }}
+              onMouseEnter={(e) => {
+                if (isClickable && !hasEventNote) {
+                  (e.target as HTMLButtonElement).style.background = 'rgba(255,255,255,0.08)'
                 }
+              }}
+              onMouseLeave={(e) => {
+                if (!hasEventNote) {
+                  (e.target as HTMLButtonElement).style.background = cellBackground
                 }
-              `}
+              }}
             >
               {day && (
                 <>
-                  {/* Colored gradient square only for dates with notes - excluding TODAY */}
-                  {(hasNotes(day) || isPartOfRangeWithNotes(day)) && day !== TODAY && (
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      {/* Filled square background with rounded corners */}
-                      <div 
-                        className="absolute rounded-lg"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          backgroundImage: getGradientStyle(getColorForDate(day)),
-                          opacity: 0.85,
-                          borderRadius: '0.5rem'
-                        }}
-                      />
-                    </div>
-                  )}
-
-                  {/* Day number - lighter color for dark background */}
-                  <span className={`relative z-10 font-bold ${(hasNotes(day) || isPartOfRangeWithNotes(day)) ? theme === 'dark' ? 'text-white drop-shadow-lg' : 'text-white drop-shadow-lg' : theme === 'dark' ? 'text-gray-100' : 'text-black'}`}>
+                  <span 
+                    onClick={(e) => {
+                      if (hasEventNote) {
+                        handleNoteClick(e, day)
+                      }
+                    }}
+                    style={{
+                      cursor: hasEventNote ? 'pointer' : 'default',
+                      position: 'relative',
+                      zIndex: 10,
+                    }}
+                  >
                     {day}
                   </span>
-                  {(hasNotes(day) || isPartOfRangeWithNotes(day)) && (
-                    <div
-                      onClick={(e) => handleNoteClick(e, day)}
-                      className="absolute inset-0 z-20 rounded cursor-pointer opacity-0 hover:bg-white/10 transition-colors duration-quick"
-                      title="View notes"
-                      role="button"
-                    />
-                  )}
                 </>
               )}
             </button>
@@ -300,15 +351,17 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
       </div>
 
       {/* Info text */}
-      <div className={`mt-md sm:mt-lg text-xs sm:text-sm italic animate-fade-rise-delay ${theme === 'dark' ? 'text-white/90' : 'text-slate-800'}`}>
+      <div 
+        style={{
+          marginTop: '12px',
+          fontSize: '12px',
+          fontStyle: 'italic',
+          color: 'rgba(255, 255, 255, 0.6)',
+          textAlign: 'center',
+        }}
+      >
         {startDate ? 'Click the + icon to add notes' : 'Click dates to select a range'}
       </div>
     </div>
   )
 }
-
-
-
-
-
-

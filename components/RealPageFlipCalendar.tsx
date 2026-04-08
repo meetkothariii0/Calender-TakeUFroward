@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import CalendarGrid from './CalendarGrid'
 import NotesModal from './NotesModal'
-import HeroBackground from './HeroBackground'
 import EventsList from './EventsList'
+import MiniStats from './MiniStats'
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -36,18 +36,6 @@ export default function RealPageFlipCalendar() {
     localStorage.setItem('calendar-theme', newTheme)
   }
 
-  // Get seasonal filter based on month
-  const getSeasonalColors = () => {
-    return {
-      button: 'bg-slate-500/90 hover:bg-slate-400 text-white',
-      text: 'text-slate-700',
-      highlight: 'bg-slate-500 text-white',
-      accent: 'bg-slate-500',
-    }
-  }
-
-  const seasonalColors = getSeasonalColors()
-
   const handleOpenNotesModal = (startDate: number, endDate: number | null) => {
     setNotesStartDate(startDate)
     setNotesEndDate(endDate)
@@ -59,8 +47,6 @@ export default function RealPageFlipCalendar() {
   }
 
   const handleSaveNotes = (notes: string) => {
-    // Notes are automatically saved in localStorage
-    // Trigger events list refresh
     setEventsRefresh(prev => prev + 1)
   }
 
@@ -85,95 +71,289 @@ export default function RealPageFlipCalendar() {
   }
 
   return (
-    <div className="relative w-full min-h-screen overflow-hidden">
-      {/* Hero Background with video and navigation */}
-      <HeroBackground />
+    <div 
+      className="relative w-full min-h-screen overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #0d0b1e 0%, #1a103a 40%, #0b1a2e 70%, #0e1f1a 100%)',
+      }}
+    >
+      {/* Decorative Orbs */}
+      {/* Orb 1: Purple, top-left */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          width: '260px',
+          height: '260px',
+          background: '#5b21b6',
+          borderRadius: '50%',
+          filter: 'blur(60px)',
+          opacity: 0.35,
+          top: '-80px',
+          left: '-80px',
+          zIndex: 1,
+        }}
+      />
+      {/* Orb 2: Teal, bottom-right */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          width: '200px',
+          height: '200px',
+          background: '#0e7490',
+          borderRadius: '50%',
+          filter: 'blur(60px)',
+          opacity: 0.35,
+          bottom: '-60px',
+          right: '-60px',
+          zIndex: 1,
+        }}
+      />
+      {/* Orb 3: Violet, center */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          width: '140px',
+          height: '140px',
+          background: '#7c3aed',
+          borderRadius: '50%',
+          filter: 'blur(60px)',
+          opacity: 0.35,
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 1,
+        }}
+      />
 
-      {/* Calendar Overlay */}
-      <div className="absolute inset-0 z-20 w-full min-h-screen flex flex-col p-sm sm:p-md md:p-lg gap-md">
-        
-        {/* Top bar with theme toggle */}
-        <div className="flex items-center justify-end px-4 sm:px-6 md:px-8 py-2">
+      {/* Main Content - Grid Layout */}
+      <div 
+        className="relative z-20 w-full h-screen flex flex-col"
+        style={{
+          display: 'grid',
+          gridTemplateRows: 'auto 1fr',
+          gridTemplateColumns: '1fr',
+          gap: '24px',
+          padding: '24px',
+        }}
+      >
+        {/* Top Bar - Month Navigation & Theme Toggle */}
+        <div 
+          className="flex items-center justify-between"
+          style={{
+            gridColumn: '1 / -1',
+          }}
+        >
+          {/* Month Navigation - Left side */}
+          <div className="flex items-center gap-4">
+            {/* Previous Month Button */}
+            <button
+              onClick={handlePrevMonth}
+              disabled={isFlipping}
+              className="flex-shrink-0"
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '0.5px solid rgba(255, 255, 255, 0.18)',
+                backdropFilter: 'blur(6px)',
+                WebkitBackdropFilter: 'blur(6px)',
+                cursor: isFlipping ? 'not-allowed' : 'pointer',
+                opacity: isFlipping ? 0.5 : 1,
+                transition: 'background 0.2s',
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onMouseEnter={(e) => {
+                if (!isFlipping) (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.16)'
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.08)'
+              }}
+              title="Previous month"
+            >
+              ←
+            </button>
+
+            {/* Month Label */}
+            <h2 
+              style={{
+                fontSize: '28px',
+                fontWeight: '600',
+                color: 'rgba(255, 255, 255, 0.95)',
+                minWidth: '140px',
+                textAlign: 'center',
+              }}
+            >
+              {MONTHS[currentMonth]}
+            </h2>
+
+            {/* Next Month Button */}
+            <button
+              onClick={handleNextMonth}
+              disabled={isFlipping}
+              className="flex-shrink-0"
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '0.5px solid rgba(255, 255, 255, 0.18)',
+                backdropFilter: 'blur(6px)',
+                WebkitBackdropFilter: 'blur(6px)',
+                cursor: isFlipping ? 'not-allowed' : 'pointer',
+                opacity: isFlipping ? 0.5 : 1,
+                transition: 'background 0.2s',
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onMouseEnter={(e) => {
+                if (!isFlipping) (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.16)'
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.08)'
+              }}
+              title="Next month"
+            >
+              →
+            </button>
+          </div>
+
+          {/* Theme Toggle - Right side */}
           <button
             onClick={toggleTheme}
-            className={`px-md sm:px-lg py-xs sm:py-md rounded-full font-semibold text-xs sm:text-sm transition-all shadow-lg z-30 ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : 'bg-slate-500/80 hover:bg-slate-400 text-white'}`}
+            style={{
+              borderRadius: '20px',
+              padding: '6px 14px',
+              background: 'rgba(255, 255, 255, 0.12)',
+              border: '0.5px solid rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              fontSize: '13px',
+              color: 'rgba(255, 255, 255, 0.9)',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              fontWeight: '500',
+            }}
+            onMouseEnter={(e) => {
+              (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.18)'
+            }}
+            onMouseLeave={(e) => {
+              (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.12)'
+            }}
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
             {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
           </button>
         </div>
 
-        {/* Main container with calendar and events side by side */}
-        <div className="flex gap-1 items-stretch justify-center w-full flex-1 overflow-hidden pl-0 sm:pl-2">
-          {/* Left: Calendar (75% width) */}
-          <div className="flex flex-col gap-6 items-start w-3/4 pt-4 justify-start flex-shrink-0">
-            {/* Month Navigation */}
-            <div className={`flex items-center justify-between gap-6 backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-8 py-4 rounded-full shadow-xl`}>
-              <button
-                onClick={handlePrevMonth}
-                disabled={isFlipping}
-                className={`px-4 py-2 rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-lg font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
-              >
-                ←
-              </button>
-              <h2 className={`text-4xl font-serif flex-1 text-center drop-shadow-lg min-w-max ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{MONTHS[currentMonth]}</h2>
-              <button
-                onClick={handleNextMonth}
-                disabled={isFlipping}
-                className={`px-4 py-2 rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-lg font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
-              >
-                →
-              </button>
-            </div>
-
-            {/* Calendar with glass blur effect */}
-            <div
-              className={`rounded-2xl shadow-2xl overflow-hidden ${isFlipping ? `flip-${flipDirection}` : ''} border-0`}
-              style={{
-                transformStyle: 'preserve-3d' as any,
-                transform: isFlipping
-                  ? flipDirection === 'next'
-                    ? 'rotateY(-90deg) translateZ(50px)'
-                    : 'rotateY(90deg) translateZ(50px)'
-                  : 'rotateY(0deg)',
-                transformOrigin: 'center',
-                transition: isFlipping ? 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'none',
-                background: 'rgba(255, 255, 255, 0.05)',
-                backdropFilter: 'blur(4px)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                boxShadow: `
-                  inset -1px -1px 3px rgba(255, 255, 255, 0.4),
-                  inset 1px 1px 3px rgba(0, 0, 0, 0.2),
-                  0 8px 32px 0 rgba(31, 38, 135, 0.37),
-                  0 0 20px rgba(255, 255, 255, 0.2)
-                `
-              }}
-            >
-              <CalendarGrid 
-                onOpenNotesModal={handleOpenNotesModal}
-                monthIndex={currentMonth}
-                seasonalColors={seasonalColors}
-                theme={theme}
-              />
-            </div>
-          </div>
-
-          {/* Right: Events List (25% width) */}
-          <div 
-            className={`rounded-2xl shadow-2xl border-0 backdrop-blur-lg p-6 w-1/4 h-fit sticky top-20 mr-2 sm:mr-4 flex-shrink-0 ${theme === 'dark' ? 'bg-slate-900/30 border border-white/20' : 'bg-garden-cream/30 border border-garden-cream/40'}`}
+        {/* Main Content Grid - Calendar + Sidebar */}
+        <div 
+          className="flex gap-6 w-full h-full overflow-hidden"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 280px',
+            alignItems: 'start',
+          }}
+        >
+          {/* Left Column - Calendar */}
+          <div
+            className="overflow-hidden"
+            style={{
+              position: 'relative',
+              zIndex: 2,
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '0.5px solid rgba(255, 255, 255, 0.12)',
+              borderRadius: '16px',
+              backdropFilter: 'blur(14px)',
+              WebkitBackdropFilter: 'blur(14px)',
+              padding: '24px',
+              transform: isFlipping
+                ? flipDirection === 'next'
+                  ? 'rotateY(-90deg) translateZ(50px)'
+                  : 'rotateY(90deg) translateZ(50px)'
+                : 'rotateY(0deg)',
+              transformOrigin: 'center',
+              transition: isFlipping ? 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'none',
+              transformStyle: 'preserve-3d' as any,
+            }}
           >
-            <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Events</h3>
-            <EventsList 
-              key={eventsRefresh}
+            <CalendarGrid 
+              onOpenNotesModal={handleOpenNotesModal}
               monthIndex={currentMonth}
               theme={theme}
-              onDeleteEvent={() => setEventsRefresh(prev => prev + 1)}
             />
+          </div>
+
+          {/* Right Column - Sidebar (Events + Stats) */}
+          <div 
+            className="flex flex-col gap-4 h-full overflow-y-auto"
+            style={{
+              position: 'relative',
+              zIndex: 2,
+            }}
+          >
+            {/* Events Panel */}
+            <div
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '0.5px solid rgba(255, 255, 255, 0.12)',
+                borderRadius: '16px',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                padding: '16px',
+                flex: '1',
+                minHeight: '0',
+                overflow: 'y-auto',
+              }}
+            >
+              <h3 
+                style={{
+                  fontSize: '13px',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255, 255, 255, 0.6)',
+                  marginBottom: '12px',
+                  fontWeight: '600',
+                }}
+              >
+                Events
+              </h3>
+              <EventsList 
+                key={eventsRefresh}
+                monthIndex={currentMonth}
+                theme={theme}
+                onDeleteEvent={() => setEventsRefresh(prev => prev + 1)}
+              />
+            </div>
+
+            {/* Mini Stats Panel */}
+            <div
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '0.5px solid rgba(255, 255, 255, 0.12)',
+                borderRadius: '16px',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                padding: '16px',
+                flex: '0 0 auto',
+              }}
+            >
+              <MiniStats monthIndex={currentMonth} theme={theme} />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Notes modal */}
+      {/* Notes Modal */}
       <NotesModal
         isOpen={isNotesModalOpen}
         onClose={handleCloseNotesModal}

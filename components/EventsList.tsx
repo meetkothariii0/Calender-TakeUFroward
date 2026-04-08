@@ -5,17 +5,6 @@ import { X } from 'lucide-react'
 
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-const COLOR_MAP: {[key: string]: {light: string, bg: string, text: string}} = {
-  'red': { light: '#ef4444', bg: 'bg-red-500/20', text: 'text-red-400' },
-  'orange': { light: '#f97316', bg: 'bg-orange-500/20', text: 'text-orange-400' },
-  'blue': { light: '#3b82f6', bg: 'bg-blue-500/20', text: 'text-blue-400' },
-  'green': { light: '#22c55e', bg: 'bg-green-500/20', text: 'text-green-400' },
-  'purple': { light: '#a855f7', bg: 'bg-purple-500/20', text: 'text-purple-400' },
-  'pink': { light: '#ec4899', bg: 'bg-pink-500/20', text: 'text-pink-400' },
-  'yellow': { light: '#eab308', bg: 'bg-yellow-500/20', text: 'text-yellow-400' },
-  'cyan': { light: '#06b6d4', bg: 'bg-cyan-500/20', text: 'text-cyan-400' },
-}
-
 interface Event {
   date: number
   endDate?: number
@@ -40,13 +29,13 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
   const loadEvents = () => {
     const allEvents: Event[] = []
     const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    
+
     for (let day = 1; day <= DAYS_IN_MONTH[monthIndex]; day++) {
       // Single day notes
       const singleKey = `notes-${monthIndex}-${day}`
       const singleColorKey = `color-${monthIndex}-${day}`
       const singleNotes = localStorage.getItem(singleKey)
-      
+
       if (singleNotes && singleNotes.trim()) {
         const color = localStorage.getItem(singleColorKey) || 'cyan'
         allEvents.push({
@@ -62,9 +51,9 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
         const rangeKey = `notes-${monthIndex}-${day}-${endDay}`
         const rangeColorKey = `color-${monthIndex}-${day}-${endDay}`
         const rangeNotes = localStorage.getItem(rangeKey)
-        
+
         if (rangeNotes && rangeNotes.trim()) {
-          const color = localStorage.getItem(rangeColorKey) || 'cyan'
+          const color = localStorage.getItem(rangeColorKey) || 'red'
           allEvents.push({
             date: day,
             endDate: endDay,
@@ -95,40 +84,130 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
     return `${date} ${MONTH_NAMES[monthIndex].substring(0, 3)}`
   }
 
+  // Get gradient and colors for event card
+  const getEventStyling = (color: string) => {
+    if (color === 'red') {
+      return {
+        gradient: 'linear-gradient(135deg, rgba(185,28,28,0.65), rgba(127,29,29,0.5))',
+        border: 'rgba(252,165,165,0.2)',
+        dateColor: '#fca5a5',
+      }
+    } else {
+      // Teal/cyan events
+      return {
+        gradient: 'linear-gradient(135deg, rgba(14,116,144,0.65), rgba(6,78,59,0.5))',
+        border: 'rgba(94,234,212,0.2)',
+        dateColor: '#5eead4',
+      }
+    }
+  }
+
   return (
-    <div className={`flex flex-col gap-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-      <div className="sticky top-0">
-        <h3 className="text-sm font-semibold uppercase tracking-wider opacity-60">Events</h3>
-      </div>
-      
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
       {events.length === 0 ? (
-        <p className={`text-sm ${theme === 'dark' ? 'text-white/40' : 'text-gray-500'}`}>
-          No events yet. Click dates to add.
+        <p 
+          style={{
+            fontSize: '12px',
+            color: 'rgba(255, 255, 255, 0.4)',
+            textAlign: 'center',
+            fontStyle: 'italic',
+          }}
+        >
+          No events yet
         </p>
       ) : (
-        <div className="space-y-2 overflow-y-auto max-h-96 pr-2">
+        <div 
+          style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '8px',
+            maxHeight: '400px',
+            overflowY: 'auto',
+          }}
+        >
           {events.map((event, idx) => {
-            const colorConfig = COLOR_MAP[event.color] || COLOR_MAP['cyan']
+            const styling = getEventStyling(event.color)
             return (
               <div
                 key={idx}
-                className={`group relative rounded-lg p-3 backdrop-blur-sm border border-white/20 transition-all hover:border-white/40 ${colorConfig.bg}`}
+                style={{
+                  position: 'relative',
+                  borderRadius: '12px',
+                  padding: '12px',
+                  background: styling.gradient,
+                  border: `0.5px solid ${styling.border}`,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.opacity = '0.9'
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.opacity = '1'
+                }}
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className={`text-xs font-semibold uppercase tracking-wider mb-1 ${colorConfig.text}`}>
+                <div 
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: '8px',
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div 
+                      style={{
+                        fontSize: '11px',
+                        fontWeight: '700',
+                        letterSpacing: '0.1em',
+                        marginBottom: '6px',
+                        color: styling.dateColor,
+                        textTransform: 'uppercase',
+                      }}
+                    >
                       {formatDateRange(event.date, event.endDate)}
                     </div>
-                    <p className={`text-sm leading-snug break-words ${theme === 'dark' ? 'text-white/90' : 'text-gray-900/90'}`}>
+                    <p 
+                      style={{
+                        fontSize: '14px',
+                        lineHeight: '1.4',
+                        color: 'rgba(255, 255, 255, 0.9)',
+                        wordBreak: 'break-word',
+                      }}
+                    >
                       {event.title}
                     </p>
                   </div>
                   <button
-                    onClick={() => handleDeleteEvent(event.date, event.endDate)}
-                    className={`opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 p-1 rounded hover:bg-white/10 ${colorConfig.text}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleDeleteEvent(event.date, event.endDate)
+                    }}
+                    style={{
+                      flexShrink: 0,
+                      padding: '4px',
+                      borderRadius: '6px',
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: styling.dateColor,
+                      opacity: 0,
+                      transition: 'opacity 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.opacity = '1'
+                      ;(e.currentTarget as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.1)'
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.opacity = '0'
+                      ;(e.currentTarget as HTMLButtonElement).style.background = 'transparent'
+                    }}
                     title="Delete event"
                   >
-                    <X className="w-4 h-4" />
+                    <X size={16} />
                   </button>
                 </div>
               </div>
