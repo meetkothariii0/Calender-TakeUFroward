@@ -108,7 +108,7 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
         <p 
           style={{
             fontSize: '12px',
-            color: 'rgba(255, 255, 255, 0.4)',
+            color: theme === 'dark' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.35)',
             textAlign: 'center',
             fontStyle: 'italic',
           }}

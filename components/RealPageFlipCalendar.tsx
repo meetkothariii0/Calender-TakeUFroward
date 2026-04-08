@@ -74,7 +74,9 @@ export default function RealPageFlipCalendar() {
     <div 
       className="relative w-full h-screen overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #0d0b1e 0%, #1a103a 40%, #0b1a2e 70%, #0e1f1a 100%)',
+        background: theme === 'dark' 
+          ? 'linear-gradient(135deg, #0d0b1e 0%, #1a103a 40%, #0b1a2e 70%, #0e1f1a 100%)'
+          : '#ffffff',
       }}
     >
       {/* Decorative Orbs */}
@@ -141,21 +143,21 @@ export default function RealPageFlipCalendar() {
             style={{
               borderRadius: '20px',
               padding: '6px 14px',
-              background: 'rgba(255, 255, 255, 0.12)',
-              border: '0.5px solid rgba(255, 255, 255, 0.2)',
+              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
+              border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.2)' : '0.5px solid rgba(0, 0, 0, 0.15)',
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
               fontSize: '13px',
-              color: 'rgba(255, 255, 255, 0.9)',
+              color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)',
               cursor: 'pointer',
               transition: 'all 0.2s',
               fontWeight: '500',
             }}
             onMouseEnter={(e) => {
-              (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.18)'
+              (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.18)' : 'rgba(0, 0, 0, 0.12)'
             }}
             onMouseLeave={(e) => {
-              (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.12)'
+              (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)'
             }}
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
@@ -180,8 +182,8 @@ export default function RealPageFlipCalendar() {
             style={{
               position: 'relative',
               zIndex: 2,
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '0.5px solid rgba(255, 255, 255, 0.12)',
+              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+              border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.12)' : '0.5px solid rgba(0, 0, 0, 0.08)',
               borderRadius: '16px',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
@@ -221,14 +223,14 @@ export default function RealPageFlipCalendar() {
                     width: '28px',
                     height: '28px',
                     borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    border: '0.5px solid rgba(255, 255, 255, 0.18)',
+                    background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)',
+                    border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.18)' : '0.5px solid rgba(0, 0, 0, 0.1)',
                     backdropFilter: 'blur(6px)',
                     WebkitBackdropFilter: 'blur(6px)',
                     cursor: isFlipping ? 'not-allowed' : 'pointer',
                     opacity: isFlipping ? 0.5 : 1,
                     transition: 'background 0.2s',
-                    color: 'rgba(255, 255, 255, 0.9)',
+                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.7)',
                     fontSize: '16px',
                     fontWeight: 'bold',
                     display: 'flex',
@@ -236,10 +238,10 @@ export default function RealPageFlipCalendar() {
                     justifyContent: 'center',
                   }}
                   onMouseEnter={(e) => {
-                    if (!isFlipping) (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.16)'
+                    if (!isFlipping) (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.1)'
                   }}
                   onMouseLeave={(e) => {
-                    (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.08)'
+                    (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)'
                   }}
                   title="Previous month"
                 >
@@ -251,7 +253,7 @@ export default function RealPageFlipCalendar() {
                   style={{
                     fontSize: '18px',
                     fontWeight: '600',
-                    color: 'rgba(255, 255, 255, 0.95)',
+                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.85)',
                     minWidth: '110px',
                     textAlign: 'center',
                   }}
@@ -320,8 +322,8 @@ export default function RealPageFlipCalendar() {
             {/* Events Panel */}
             <div
               style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '0.5px solid rgba(255, 255, 255, 0.12)',
+                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+                border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.12)' : '0.5px solid rgba(0, 0, 0, 0.08)',
                 borderRadius: '16px',
                 backdropFilter: 'blur(14px)',
                 WebkitBackdropFilter: 'blur(14px)',
@@ -335,7 +337,7 @@ export default function RealPageFlipCalendar() {
                   fontSize: '11px',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
-                  color: 'rgba(255, 255, 255, 0.6)',
+                  color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.45)',
                   marginBottom: '8px',
                   fontWeight: '600',
                 }}
@@ -352,7 +354,7 @@ export default function RealPageFlipCalendar() {
 
             {/* Daily Habit Logger Panel */}
             <div>
-              <DailyHabitLogger />
+              <DailyHabitLogger theme={theme} />
             </div>
           </div>
         </div>

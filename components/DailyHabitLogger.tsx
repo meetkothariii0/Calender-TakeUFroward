@@ -23,7 +23,11 @@ const COLOR_TO_BG: { [key: string]: string } = {
   '#10b981': 'rgba(16,185,129,0.15)',
 }
 
-export default function DailyHabitLogger() {
+interface DailyHabitLoggerProps {
+  theme?: 'dark' | 'light'
+}
+
+export default function DailyHabitLogger({ theme = 'dark' }: DailyHabitLoggerProps) {
   const [habits, setHabits] = useState<Habit[]>([])
   const [newHabitName, setNewHabitName] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -116,8 +120,8 @@ export default function DailyHabitLogger() {
   return (
     <div
       style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        border: '0.5px solid rgba(255, 255, 255, 0.12)',
+        background: theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.02)',
+        border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.12)' : '0.5px solid rgba(0, 0, 0, 0.08)',
         borderRadius: '16px',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
@@ -132,7 +136,7 @@ export default function DailyHabitLogger() {
             fontWeight: '600',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
-            color: 'rgba(255, 255, 255, 0.4)',
+            color: theme === 'dark' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.35)',
             marginBottom: '4px',
           }}
         >
@@ -141,7 +145,7 @@ export default function DailyHabitLogger() {
         <p
           style={{
             fontSize: '11px',
-            color: 'rgba(255,255,255,0.25)',
+            color: theme === 'dark' ? 'rgba(255,255,255,0.25)' : 'rgba(0, 0, 0, 0.3)',
           }}
         >
           {getTodayDate()}
@@ -154,7 +158,7 @@ export default function DailyHabitLogger() {
           <p
             style={{
               fontSize: '12px',
-              color: 'rgba(255,255,255,0.35)',
+              color: theme === 'dark' ? 'rgba(255,255,255,0.35)' : 'rgba(0, 0, 0, 0.35)',
               textAlign: 'center',
               padding: '20px 0',
             }}
@@ -170,7 +174,7 @@ export default function DailyHabitLogger() {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '10px 0',
-                borderBottom: index < habits.length - 1 ? '0.5px solid rgba(255,255,255,0.07)' : 'none',
+                borderBottom: index < habits.length - 1 ? (theme === 'dark' ? '0.5px solid rgba(255,255,255,0.07)' : '0.5px solid rgba(0, 0, 0, 0.05)') : 'none',
                 gap: '8px',
               }}
             >
@@ -220,9 +224,9 @@ export default function DailyHabitLogger() {
                       fontSize: '13px',
                       padding: '4px 6px',
                       borderRadius: '4px',
-                      background: 'rgba(255,255,255,0.1)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      color: 'rgba(255,255,255,0.9)',
+                      background: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0, 0, 0, 0.05)',
+                      border: theme === 'dark' ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
+                      color: theme === 'dark' ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.8)',
                       outline: 'none',
                     }}
                   />
@@ -230,7 +234,7 @@ export default function DailyHabitLogger() {
                   <span
                     style={{
                       fontSize: '13px',
-                      color: habit.completed ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.75)',
+                      color: habit.completed ? (theme === 'dark' ? 'rgba(255,255,255,0.35)' : 'rgba(0, 0, 0, 0.35)') : (theme === 'dark' ? 'rgba(255,255,255,0.75)' : 'rgba(0, 0, 0, 0.75)'),
                       textDecoration: habit.completed ? 'line-through' : 'none',
                       transition: 'all 0.15s ease',
                     }}
@@ -345,9 +349,9 @@ export default function DailyHabitLogger() {
               fontSize: '12px',
               padding: '5px 6px',
               borderRadius: '5px',
-              background: 'rgba(255,255,255,0.08)',
-              border: '0.5px solid rgba(255,255,255,0.15)',
-              color: 'rgba(255,255,255,0.9)',
+              background: theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0, 0, 0, 0.05)',
+              border: theme === 'dark' ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0, 0, 0, 0.1)',
+              color: theme === 'dark' ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.8)',
               outline: 'none',
             }}
           />
@@ -374,10 +378,10 @@ export default function DailyHabitLogger() {
             onClick={() => setShowAddForm(false)}
             style={{
               padding: '5px 10px',
-              background: 'rgba(255,255,255,0.08)',
-              border: '0.5px solid rgba(255,255,255,0.15)',
+              background: theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0, 0, 0, 0.05)',
+              border: theme === 'dark' ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0, 0, 0, 0.1)',
               borderRadius: '5px',
-              color: 'rgba(255,255,255,0.6)',
+              color: theme === 'dark' ? 'rgba(255,255,255,0.6)' : 'rgba(0, 0, 0, 0.55)',
               fontSize: '11px',
               cursor: 'pointer',
               transition: 'all 0.2s',
@@ -404,10 +408,10 @@ export default function DailyHabitLogger() {
           style={{
             width: '100%',
             padding: '8px',
-            background: 'rgba(255,255,255,0.08)',
-            border: '0.5px solid rgba(255,255,255,0.15)',
+            background: theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0, 0, 0, 0.05)',
+            border: theme === 'dark' ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0, 0, 0, 0.1)',
             borderRadius: '6px',
-            color: 'rgba(255,255,255,0.7)',
+            color: theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'rgba(0, 0, 0, 0.6)',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -419,12 +423,12 @@ export default function DailyHabitLogger() {
             marginBottom: '12px',
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.12)'
-            e.currentTarget.style.color = 'rgba(255,255,255,0.9)'
+            e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(0, 0, 0, 0.08)'
+            e.currentTarget.style.color = theme === 'dark' ? 'rgba(255,255,255,0.9)' : 'rgba(0, 0, 0, 0.8)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
-            e.currentTarget.style.color = 'rgba(255,255,255,0.7)'
+            e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0, 0, 0, 0.05)'
+            e.currentTarget.style.color = theme === 'dark' ? 'rgba(255,255,255,0.7)' : 'rgba(0, 0, 0, 0.6)'
           }}
         >
           <Plus size={14} />
@@ -434,11 +438,11 @@ export default function DailyHabitLogger() {
 
       {/* Progress Bar */}
       {habits.length > 0 && (
-        <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '0.5px solid rgba(255,255,255,0.07)' }}>
+        <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: theme === 'dark' ? '0.5px solid rgba(255,255,255,0.07)' : '0.5px solid rgba(0, 0, 0, 0.05)' }}>
           <div
             style={{
               fontSize: '10px',
-              color: 'rgba(255,255,255,0.3)',
+              color: theme === 'dark' ? 'rgba(255,255,255,0.3)' : 'rgba(0, 0, 0, 0.35)',
               marginBottom: '6px',
             }}
           >
@@ -453,7 +457,7 @@ export default function DailyHabitLogger() {
               width: '100%',
               height: '4px',
               borderRadius: '2px',
-              background: 'rgba(255,255,255,0.08)',
+              background: theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0, 0, 0, 0.05)',
               overflow: 'hidden',
             }}
           >

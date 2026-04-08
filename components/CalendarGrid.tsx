@@ -202,7 +202,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
             style={{
               fontSize: '14px',
               fontWeight: '500',
-              color: 'rgba(255, 255, 255, 0.8)',
+              color: theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
             }}
           >
             {endDate 
@@ -215,10 +215,10 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
             style={{
               padding: '8px 12px',
               borderRadius: '8px',
-              background: 'rgba(255, 255, 255, 0.2)',
-              border: '0.5px solid rgba(255, 255, 255, 0.3)',
+              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)',
+              border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.3)' : '0.5px solid rgba(0, 0, 0, 0.15)',
               cursor: 'pointer',
-              color: 'rgba(255, 255, 255, 0.9)',
+              color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.75)',
               fontWeight: '600',
               fontSize: '13px',
               transition: 'all 0.2s',
@@ -227,10 +227,10 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
               gap: '6px',
             }}
             onMouseEnter={(e) => {
-              (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.3)'
+              (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.12)'
             }}
             onMouseLeave={(e) => {
-              (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.2)'
+              (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)'
             }}
             title="Add notes"
           >
@@ -257,7 +257,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
             style={{
               fontSize: '11px',
               letterSpacing: '0.08em',
-              color: 'rgba(255,255,255,0.38)',
+              color: theme === 'dark' ? 'rgba(255,255,255,0.38)' : 'rgba(0, 0, 0, 0.45)',
               textTransform: 'uppercase',
               textAlign: 'center',
               fontWeight: '600',
@@ -291,7 +291,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
 
           let cellBackground = 'transparent'
           let cellBorder = '0.5px solid transparent'
-          let cellColor = 'rgba(255,255,255,0.65)'
+          let cellColor = theme === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.65)'
           let cellBorderRadius = '10px'
 
           // Selection styling with colored backgrounds
@@ -386,7 +386,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           marginTop: '6px',
           fontSize: '12px',
           fontStyle: 'italic',
-          color: 'rgba(255, 255, 255, 0.6)',
+          color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.45)',
           textAlign: 'center',
         }}
       >
