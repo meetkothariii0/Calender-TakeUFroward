@@ -294,11 +294,13 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           let cellColor = theme === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.65)'
           let cellBorderRadius = '10px'
 
-          // Selection styling with colored backgrounds
-          if (inSelection && !hasEventNote) {
-            cellBackground = COLOR_MAPPINGS[eventColor] || COLOR_MAPPINGS['cyan']
-            cellBorder = `1px solid ${COLOR_DOT_MAPPINGS[eventColor] || COLOR_DOT_MAPPINGS['cyan']}`
-            cellColor = 'rgba(255,255,255,0.8)'
+          // Grey selection block while selecting (when startDate is set)
+          if (startDate !== null && !hasEventNote) {
+            if (inSelection) {
+              cellBackground = theme === 'dark' ? 'rgba(128, 128, 128, 0.4)' : 'rgba(128, 128, 128, 0.3)'
+              cellBorder = theme === 'dark' ? '1px solid rgba(128, 128, 128, 0.6)' : '1px solid rgba(128, 128, 128, 0.5)'
+              cellColor = theme === 'dark' ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'
+            }
           }
           // Today styling
           else if (isToday) {
