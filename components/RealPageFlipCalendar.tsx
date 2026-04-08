@@ -165,7 +165,7 @@ export default function RealPageFlipCalendar() {
       <div 
         className="relative z-20 w-full h-full flex flex-col"
         style={{
-          padding: '12px',
+          padding: window.innerWidth < 768 ? '8px' : '12px',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -205,10 +205,12 @@ export default function RealPageFlipCalendar() {
           className="flex gap-2 w-full flex-1"
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 300px',
+            gridTemplateColumns: window.innerWidth < 768 ? '1fr' : window.innerWidth < 1024 ? '1fr 250px' : '1fr 300px',
+            gridTemplateRows: window.innerWidth < 768 ? 'auto 1fr' : 'auto',
             alignItems: 'stretch',
             height: '100%',
             overflow: 'hidden',
+            gap: window.innerWidth < 768 ? '8px' : '4px',
           }}
         >
           {/* Left Column - Calendar */}
@@ -222,7 +224,7 @@ export default function RealPageFlipCalendar() {
               borderRadius: '16px',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
-              padding: '60px 12px 8px 12px',
+              padding: window.innerWidth < 768 ? '40px 8px 8px 8px' : '60px 12px 8px 12px',
               transform: isFlipping
                 ? flipDirection === 'next'
                   ? 'rotateY(-90deg) translateZ(50px)'
