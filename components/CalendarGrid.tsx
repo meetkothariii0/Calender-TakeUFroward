@@ -295,6 +295,9 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           let cellColor = theme === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.65)'
           let cellBorderRadius = '10px'
 
+          // Default grid border for all cells (always show grid)
+          let cellBorder = theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.2)'
+          
           // Grey selection block while selecting - show grey for selected dates AND dates in between
           if (!hasEventNote && startDate !== null && ((isSelectedDay) || (startDate && endDate && inSelection))) {
             cellBackground = theme === 'dark' ? 'rgba(128, 128, 128, 0.5)' : 'rgba(128, 128, 128, 0.4)'
@@ -304,9 +307,6 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           // Today styling
           else if (isToday) {
             cellBorder = theme === 'dark' ? '1.5px solid rgba(255,255,255,0.3)' : '1.5px solid rgba(0,0,0,0.3)'
-          } else {
-            // Default grid border for all cells
-            cellBorder = theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.2)'
           }
 
           return (
