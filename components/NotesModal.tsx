@@ -4,6 +4,17 @@ import { useState, useEffect } from 'react'
 
 const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
+const COLOR_OPTIONS = [
+  { name: 'Red', value: 'red', light: '#ef4444', bright: '#dc2626' },
+  { name: 'Orange', value: 'orange', light: '#f97316', bright: '#ea580c' },
+  { name: 'Blue', value: 'blue', light: '#3b82f6', bright: '#1d4ed8' },
+  { name: 'Green', value: 'green', light: '#22c55e', bright: '#15803d' },
+  { name: 'Purple', value: 'purple', light: '#a855f7', bright: '#7e22ce' },
+  { name: 'Pink', value: 'pink', light: '#ec4899', bright: '#be185d' },
+  { name: 'Yellow', value: 'yellow', light: '#eab308', bright: '#ca8a04' },
+  { name: 'Cyan', value: 'cyan', light: '#06b6d4', bright: '#0891b2' },
+]
+
 interface NotesModalProps {
   isOpen: boolean
   onClose: () => void
@@ -24,14 +35,18 @@ export default function NotesModal({
   theme = 'dark',
 }: NotesModalProps) {
   const [notes, setNotes] = useState('')
+  const [selectedColor, setSelectedColor] = useState('cyan')
   const [isSaved, setIsSaved] = useState(false)
 
   useEffect(() => {
     if (isOpen && startDate !== null) {
-      // Load existing notes
+      // Load existing notes and color
       const key = endDate ? `notes-${monthIndex}-${startDate}-${endDate}` : `notes-${monthIndex}-${startDate}`
+      const colorKey = endDate ? `color-${monthIndex}-${startDate}-${endDate}` : `color-${monthIndex}-${startDate}`
       const saved = localStorage.getItem(key)
+      const savedColor = localStorage.getItem(colorKey)
       setNotes(saved || '')
+      setSelectedColor(savedColor || 'cyan')
       setIsSaved(false)
     }
   }, [isOpen, startDate, endDate, monthIndex])
@@ -39,7 +54,9 @@ export default function NotesModal({
   const handleSave = () => {
     if (startDate !== null) {
       const key = endDate ? `notes-${monthIndex}-${startDate}-${endDate}` : `notes-${monthIndex}-${startDate}`
+      const colorKey = endDate ? `color-${monthIndex}-${startDate}-${endDate}` : `color-${monthIndex}-${startDate}`
       localStorage.setItem(key, notes)
+      localStorage.setItem(colorKey, selectedColor)
       onSave(notes)
       setIsSaved(true)
       setTimeout(() => {
@@ -78,7 +95,7 @@ export default function NotesModal({
           </div>
 
           {/* Body */}
-          <div className="p-lg">
+          <div className="p-lg space-y-lg">
             <textarea
               autoFocus
               value={notes}
@@ -95,6 +112,32 @@ export default function NotesModal({
                 }
               `}
             />
+
+            {/* Color Picker */}
+            <div>
+              <label className={`text-sm font-semibold mb-md block ${theme === 'dark' ? 'text-white' : 'text-white'}`}>
+                Select Color for Note 🎨
+              </label>
+              <div className="grid grid-cols-4 gap-md">
+                {COLOR_OPTIONS.map((color) => (
+                  <button
+                    key={color.value}
+                    onClick={() => setSelectedColor(color.value)}
+                    className={`w-full aspect-square rounded-lg transition-all duration-quick ${
+                      selectedColor === color.value ? 'ring-4 ring-offset-2 scale-110' : 'hover:scale-105'
+                    } ${theme === 'dark' ? 'ring-white ring-offset-slate-900/20' : 'ring-white/80 ring-offset-slate-400/20'}`}
+                    title={color.name}
+                  >
+                    <div 
+                      className="w-full h-full rounded-lg shadow-lg transition-all duration-quick"
+                      style={{
+                        background: `linear-gradient(135deg, ${color.light} 0%, ${color.bright} 100%)`
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Footer */}
@@ -116,7 +159,7 @@ export default function NotesModal({
               onClick={handleSave}
               disabled={isSaved}
               className={`
-                px-lg py-md text-sm font-medium font-semibold rounded-lg
+                px-lg py-md text-sm font-semibold rounded-lg
                 transition-all duration-quick drop-shadow-lg
                 ${isSaved ? 'opacity-80' : 'hover:scale-105'}
                 ${theme === 'dark'

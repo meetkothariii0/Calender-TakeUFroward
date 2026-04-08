@@ -214,19 +214,19 @@ export default function RealPageFlipCalendar() {
         </button>
 
         {/* Month Navigation */}
-        <div className={`flex items-center justify-between gap-lg backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15 border border-white/30' : 'bg-garden-cream/15 border border-garden-cream/30'} px-lg py-md rounded-full shadow-xl`}>
+        <div className={`flex items-center justify-between gap-xl backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-xl py-lg rounded-full shadow-xl w-full max-w-2xl`}>
           <button
             onClick={handlePrevMonth}
             disabled={isFlipping}
-            className={`px-lg py-xs rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-sm font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
+            className={`px-xl py-md rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-lg font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
           >
             ←
           </button>
-          <h2 className={`text-3xl font-serif min-w-fit drop-shadow-lg ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{MONTHS[currentMonth]}</h2>
+          <h2 className={`text-4xl font-serif flex-1 text-center drop-shadow-lg ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{MONTHS[currentMonth]}</h2>
           <button
             onClick={handleNextMonth}
             disabled={isFlipping}
-            className={`px-lg py-xs rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-sm font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
+            className={`px-xl py-md rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-lg font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
           >
             →
           </button>
@@ -234,7 +234,7 @@ export default function RealPageFlipCalendar() {
 
         {/* Calendar with glass blur effect */}
         <div
-          className={`backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden ${isFlipping ? `flip-${flipDirection}` : ''} ${theme === 'dark' ? 'bg-slate-900/15 border border-white/40' : 'bg-garden-cream/15 border border-garden-cream/30'}`}
+          className={`rounded-2xl shadow-2xl overflow-hidden ${isFlipping ? `flip-${flipDirection}` : ''} border-0`}
           style={{
             transformStyle: 'preserve-3d' as any,
             transform: isFlipping
@@ -244,8 +244,17 @@ export default function RealPageFlipCalendar() {
               : 'rotateY(0deg)',
             transformOrigin: 'center',
             transition: isFlipping ? 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'none',
-            width: '680px',
+            width: '900px',
             maxWidth: '95vw',
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(4px)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            boxShadow: `
+              inset -1px -1px 3px rgba(255, 255, 255, 0.4),
+              inset 1px 1px 3px rgba(0, 0, 0, 0.2),
+              0 8px 32px 0 rgba(31, 38, 135, 0.37),
+              0 0 20px rgba(255, 255, 255, 0.2)
+            `
           }}
         >
           <CalendarGrid 

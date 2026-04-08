@@ -104,6 +104,74 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
     return notes !== null && notes.trim() !== ''
   }
 
+  // Get all date ranges with notes
+  const getDateRangesWithNotes = (): Array<{startDate: number, endDate: number}> => {
+    if (typeof window === 'undefined') return []
+    const ranges: Array<{startDate: number, endDate: number}> = []
+    
+    for (let i = 1; i <= DAYS_IN_MONTH[monthIndex]; i++) {
+      for (let j = i; j <= DAYS_IN_MONTH[monthIndex]; j++) {
+        const rangeKey = `notes-${monthIndex}-${i}-${j}`
+        if (localStorage.getItem(rangeKey)) {
+          ranges.push({ startDate: i, endDate: j })
+        }
+      }
+    }
+    return ranges
+  }
+
+  // Check if a date is part of a range with notes
+  const isPartOfRangeWithNotes = (day: number): {start: number, end: number} | null => {
+    const ranges = getDateRangesWithNotes()
+    for (const range of ranges) {
+      if (day >= range.startDate && day <= range.endDate) {
+        return { start: range.startDate, end: range.endDate }
+      }
+    }
+    return null
+  }
+
+  // Get color for a date
+  const getColorForDate = (day: number): string => {
+    if (typeof window === 'undefined') return 'cyan'
+    const range = isPartOfRangeWithNotes(day)
+    if (range) {
+      const colorKey = `color-${monthIndex}-${range.start}-${range.end}`
+      return localStorage.getItem(colorKey) || 'cyan'
+    } else if (hasNotes(day)) {
+      const colorKey = `color-${monthIndex}-${day}`
+      return localStorage.getItem(colorKey) || 'cyan'
+    }
+    return 'cyan'
+  }
+
+  // Handle note icon click
+  const handleNoteClick = (e: React.MouseEvent, day: number) => {
+    e.stopPropagation()
+    const range = isPartOfRangeWithNotes(day)
+    if (range) {
+      onOpenNotesModal(range.start, range.end)
+    } else if (hasNotes(day)) {
+      onOpenNotesModal(day, null)
+    }
+  }
+
+  // Get gradient colors based on color name
+  const getGradientStyle = (colorName: string): string => {
+    const colorMap: {[key: string]: {light: string, bright: string}} = {
+      'red': { light: '#ef4444', bright: '#dc2626' },
+      'orange': { light: '#f97316', bright: '#ea580c' },
+      'blue': { light: '#3b82f6', bright: '#1d4ed8' },
+      'green': { light: '#22c55e', bright: '#15803d' },
+      'purple': { light: '#a855f7', bright: '#7e22ce' },
+      'pink': { light: '#ec4899', bright: '#be185d' },
+      'yellow': { light: '#eab308', bright: '#ca8a04' },
+      'cyan': { light: '#06b6d4', bright: '#0891b2' },
+    }
+    const color = colorMap[colorName] || colorMap['cyan']
+    return `linear-gradient(to right, ${color.light} 0%, ${color.bright} 100%)`
+  }
+
   // Handle touch events for swipe detection
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX)
@@ -130,14 +198,14 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
 
   return (
     <div 
-      className={`w-full bg-transparent backdrop-blur-sm p-xl ${theme === 'dark' ? 'border-t border-white/30' : 'border-t border-slate-300/50'}`}
+      className={`w-full bg-transparent p-xl`}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       {/* Selection indicator with notes button */}
       {startDate && (
         <div className="mb-lg flex items-center gap-md">
-          <span className={`text-sm font-sans ${theme === 'dark' ? 'text-white' : colors.text}`}>
+          <span className={`text-sm font-sans whitespace-nowrap ${theme === 'dark' ? 'text-white' : colors.text}`}>
             {endDate 
               ? `${MONTH_NAMES[monthIndex]} ${startDate}–${endDate}` 
               : `${MONTH_NAMES[monthIndex]} ${startDate}`
@@ -155,19 +223,29 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
       )}
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 gap-xs mb-sm">
+      <div className="grid grid-cols-7 gap-sm mb-sm">
         {DAYS_OF_WEEK.map((day) => (
           <div
             key={day}
-            className={`text-center text-xs font-semibold uppercase tracking-wider py-xs ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}
+            className={`w-16 h-16 flex items-center justify-center relative rounded-full text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}
           >
-            {day}
+            {/* Glass circle background */}
+            <div 
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(10px)',
+                border: 'none',
+                boxShadow: theme === 'dark' ? 'inset 0 1px 2px rgba(255, 255, 255, 0.2)' : 'inset 0 1px 2px rgba(255, 255, 255, 0.3)'
+              }}
+            />
+            <span className="relative z-10">{day}</span>
           </div>
         ))}
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-xs">
+      <div className="grid grid-cols-7 gap-sm">
         {calendarDays.map((day, index) => {
           const isWeekend = index % 7 >= 5
           const isToday = day === TODAY
@@ -182,29 +260,78 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
               onClick={() => day && handleDateClick(day)}
               disabled={!isClickable}
               className={`
-                aspect-square flex items-center justify-center relative rounded text-sm font-medium
-                transition-all duration-quick
+                w-16 h-16 flex items-center justify-center relative rounded-full text-base font-medium
+                transition-all duration-quick bg-transparent border-0 outline-none
                 ${!isClickable ? 'cursor-default' : 'cursor-pointer'}
                 ${day === null ? 'pointer-events-none' : ''}
                 
-                ${isStart || isEnd ? theme === 'dark' ? 'bg-white/80 text-slate-900 shadow-subtle' : `${colors.highlight} shadow-subtle` : ''}
-                ${inRange && !isStart && !isEnd ? theme === 'dark' ? 'bg-white/40 text-white' : 'bg-slate-300 text-slate-900' : ''}
-                
-                ${isToday && !isStart && !isEnd ? `ring-2 ${theme === 'dark' ? 'ring-white' : colors.accent} ring-offset-0` : ''}
-                ${isToday && (isStart || isEnd) ? theme === 'dark' ? 'ring-2 ring-slate-900' : 'ring-2 ring-slate-900' : ''}
-                
-                ${!inRange && !isStart && !isEnd && day
-                  ? theme === 'dark' ? 'text-white hover:bg-white/30' : 'text-slate-900 hover:bg-slate-200 hover:bg-opacity-50'
+                ${!inRange && !isStart && !isEnd && day && !isPartOfRangeWithNotes(day)
+                  ? theme === 'dark' ? 'text-white hover:bg-white/5' : 'text-slate-900 hover:bg-slate-200 hover:bg-opacity-20'
                   : ''
                 }
               `}
             >
               {day && (
                 <>
-                  <span className="relative z-10">{day}</span>
-                  {hasNotes(day) && (
-                    <div 
-                      className={`absolute bottom-1.5 right-1.5 w-1.5 h-1.5 rounded-full ${theme === 'dark' ? 'bg-white' : 'bg-slate-500'}`}
+                  {/* Glass circle background for all dates */}
+                  <div 
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: isStart || isEnd 
+                        ? theme === 'dark' 
+                          ? 'rgba(255, 255, 255, 0.8)' 
+                          : 'rgba(90, 115, 138, 0.9)'
+                        : inRange && !isStart && !isEnd
+                        ? theme === 'dark'
+                          ? 'rgba(255, 255, 255, 0.4)'
+                          : 'rgba(90, 115, 138, 0.4)'
+                        : theme === 'dark' 
+                        ? 'rgba(255, 255, 255, 0.08)' 
+                        : 'rgba(255, 255, 255, 0.15)',
+                      backdropFilter: 'blur(10px)',
+                      border: 'none',
+                      boxShadow: (isStart || isEnd) 
+                        ? 'inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15)'
+                        : theme === 'dark' 
+                        ? 'inset 0 1px 2px rgba(255, 255, 255, 0.2)' 
+                        : 'inset 0 1px 2px rgba(255, 255, 255, 0.3)'
+                    }}
+                  />
+                  
+                  {/* Colored gradient circle for dates with notes */}
+                  {(hasNotes(day) || isPartOfRangeWithNotes(day)) && (
+                    <div className="absolute inset-0 rounded-full flex items-center justify-center pointer-events-none">
+                      {/* Outer rotating ring */}
+                      <div 
+                        className="absolute rounded-full animate-spin"
+                        style={{
+                          width: '58px',
+                          height: '58px',
+                          animationDuration: '4s',
+                          backgroundImage: getGradientStyle(getColorForDate(day)),
+                          opacity: 0.8
+                        }}
+                      />
+                      {/* Inner glow */}
+                      <div 
+                        className="absolute rounded-full blur-sm"
+                        style={{
+                          width: '52px',
+                          height: '52px',
+                          backgroundImage: getGradientStyle(getColorForDate(day)),
+                          opacity: 0.4
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  <span className={`relative z-10 font-bold ${(isStart || isEnd) ? theme === 'dark' ? 'text-slate-900' : 'text-white' : inRange ? 'text-white' : (hasNotes(day) || isPartOfRangeWithNotes(day)) ? theme === 'dark' ? 'text-white drop-shadow-lg' : 'text-white drop-shadow-lg' : theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{day}</span>
+                  {(hasNotes(day) || isPartOfRangeWithNotes(day)) && (
+                    <div
+                      onClick={(e) => handleNoteClick(e, day)}
+                      className="absolute inset-0 z-20 rounded-full cursor-pointer opacity-0 hover:bg-white/5 transition-colors duration-quick"
+                      title="View notes"
+                      role="button"
                     />
                   )}
                 </>
@@ -215,7 +342,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
       </div>
 
       {/* Info text */}
-      <div className={`mt-lg text-xs italic animate-fade-rise-delay ${theme === 'dark' ? 'text-white/70' : 'text-slate-600'}`}>
+      <div className={`mt-lg text-xs italic animate-fade-rise-delay ${theme === 'dark' ? 'text-white/90' : 'text-slate-800'}`}>
         {startDate ? 'Click the + icon to add notes' : 'Click dates to select a range'}
       </div>
     </div>
