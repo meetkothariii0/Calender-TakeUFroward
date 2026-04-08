@@ -291,7 +291,6 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
 
 
           let cellBackground = 'transparent'
-          let cellBorder = '0.5px solid transparent'
           let cellColor = theme === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.65)'
           let cellBorderRadius = '10px'
 
