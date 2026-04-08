@@ -109,6 +109,15 @@ export default function HeroBackground() {
           zIndex: 5
         }}
       />
+
+      {/* Dark overlay for better text visibility */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.45)',
+          zIndex: 6
+        }}
+      />
     </div>
   )
 }

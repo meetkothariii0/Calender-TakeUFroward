@@ -90,23 +90,25 @@ export default function RealPageFlipCalendar() {
       <HeroBackground />
 
       {/* Calendar Overlay */}
-      <div className="absolute inset-0 z-20 w-full min-h-screen flex flex-col items-center justify-center p-sm sm:p-md md:p-lg gap-md sm:gap-lg md:gap-xl">
+      <div className="absolute inset-0 z-20 w-full min-h-screen flex flex-col p-sm sm:p-md md:p-lg gap-md">
         
-        {/* Theme toggle button */}
-        <button
-          onClick={toggleTheme}
-          className={`absolute top-sm right-sm sm:top-lg sm:right-lg px-md sm:px-lg py-xs sm:py-md rounded-full font-semibold text-xs sm:text-sm transition-all shadow-lg z-30 ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : 'bg-slate-500/80 hover:bg-slate-400 text-white'}`}
-          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-        >
-          {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
-        </button>
+        {/* Top bar with theme toggle */}
+        <div className="flex items-center justify-end px-4 sm:px-6 md:px-8 py-2">
+          <button
+            onClick={toggleTheme}
+            className={`px-md sm:px-lg py-xs sm:py-md rounded-full font-semibold text-xs sm:text-sm transition-all shadow-lg z-30 ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : 'bg-slate-500/80 hover:bg-slate-400 text-white'}`}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+          </button>
+        </div>
 
         {/* Main container with calendar and events side by side */}
-        <div className="flex gap-6 items-start justify-center w-full h-screen max-w-full">
+        <div className="flex gap-6 items-start justify-start w-full flex-1 overflow-hidden pl-4 sm:pl-8">
           {/* Left: Calendar (75% width) */}
-          <div className="flex flex-col gap-4 items-center w-3/4 h-full pt-12 justify-start">
+          <div className="flex flex-col gap-6 items-start w-3/4 pt-4 justify-start flex-shrink-0">
             {/* Month Navigation */}
-            <div className={`flex items-center justify-between gap-4 backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-8 py-4 rounded-full shadow-xl`}>
+            <div className={`flex items-center justify-between gap-6 backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-8 py-4 rounded-full shadow-xl`}>
               <button
                 onClick={handlePrevMonth}
                 disabled={isFlipping}
@@ -158,7 +160,7 @@ export default function RealPageFlipCalendar() {
 
           {/* Right: Events List (25% width) */}
           <div 
-            className={`rounded-2xl shadow-2xl border-0 backdrop-blur-lg p-6 w-1/4 h-fit sticky top-12 ${theme === 'dark' ? 'bg-slate-900/30 border border-white/20' : 'bg-garden-cream/30 border border-garden-cream/40'}`}
+            className={`rounded-2xl shadow-2xl border-0 backdrop-blur-lg p-6 w-1/4 h-fit sticky top-20 mr-4 sm:mr-8 flex-shrink-0 ${theme === 'dark' ? 'bg-slate-900/30 border border-white/20' : 'bg-garden-cream/30 border border-garden-cream/40'}`}
           >
             <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>Events</h3>
             <EventsList 

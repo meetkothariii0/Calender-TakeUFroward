@@ -227,7 +227,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
         {DAYS_OF_WEEK.map((day) => (
           <div
             key={day}
-            className={`h-16 w-16 flex items-center justify-center text-xs sm:text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}
+            className={`h-12 w-20 flex items-center justify-center text-xs sm:text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}
           >
             <span className="relative z-10">{day}</span>
           </div>
@@ -250,7 +250,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
               onClick={() => day && handleDateClick(day)}
               disabled={!isClickable}
               className={`
-                h-16 w-16 flex items-center justify-center relative rounded text-lg font-bold
+                h-12 w-20 flex items-center justify-center relative rounded text-sm font-bold
                 transition-all duration-quick bg-transparent border-0 outline-none
                 ${!isClickable ? 'cursor-default' : 'cursor-pointer'}
                 ${day === null ? 'pointer-events-none' : ''}
