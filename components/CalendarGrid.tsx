@@ -191,11 +191,13 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
       {startDate && (
         <div 
           style={{
-            marginBottom: '2px',
+            marginBottom: '-10px',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px',
+            gap: '8px',
             flexWrap: 'wrap',
+            position: 'relative',
+            zIndex: 5,
           }}
         >
           <span 
@@ -213,18 +215,18 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           <button
             onClick={handleAddNotesClick}
             style={{
-              padding: '4px 8px',
-              borderRadius: '4px',
+              padding: '8px 14px',
+              borderRadius: '6px',
               background: theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)',
               border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.3)' : '0.5px solid rgba(0, 0, 0, 0.15)',
               cursor: 'pointer',
               color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.75)',
               fontWeight: '600',
-              fontSize: '9px',
+              fontSize: '11px',
               transition: 'all 0.2s',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '8px',
             }}
             onMouseEnter={(e) => {
               (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.12)'
@@ -234,7 +236,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
             }}
             title="Add notes"
           >
-            <Plus size={14} />
+            <Plus size={16} />
             Add notes
           </button>
         </div>

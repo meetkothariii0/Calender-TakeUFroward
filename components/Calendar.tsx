@@ -75,9 +75,12 @@ export default function Calendar() {
 
   const handleCloseNotesModal = () => {
     setIsNotesModalOpen(false)
+    // Refresh events when modal closes - notes were saved
+    setEventsRefresh(prev => prev + 1)
   }
 
   const handleSaveNotes = (notes: string) => {
+    // Immediately refresh events list
     setEventsRefresh(prev => prev + 1)
   }
 
