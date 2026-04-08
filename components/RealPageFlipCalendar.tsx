@@ -98,19 +98,19 @@ export default function RealPageFlipCalendar() {
         </button>
 
         {/* Month Navigation */}
-        <div className={`flex items-center justify-between gap-sm sm:gap-lg md:gap-xl backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-sm sm:px-lg md:px-xl py-sm sm:py-lg md:py-lg rounded-full shadow-xl w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl`}>
+        <div className={`flex items-center justify-between gap-4 backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-6 py-3 rounded-full shadow-xl w-96`}>
           <button
             onClick={handlePrevMonth}
             disabled={isFlipping}
-            className={`px-md sm:px-lg md:px-xl py-xs sm:py-md md:py-md rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-base sm:text-lg md:text-xl font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
+            className={`px-4 py-2 rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-lg font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
           >
             ←
           </button>
-          <h2 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif flex-1 text-center drop-shadow-lg ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{MONTHS[currentMonth]}</h2>
+          <h2 className={`text-3xl font-serif flex-1 text-center drop-shadow-lg min-w-max ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{MONTHS[currentMonth]}</h2>
           <button
             onClick={handleNextMonth}
             disabled={isFlipping}
-            className={`px-md sm:px-lg md:px-xl py-xs sm:py-md md:py-md rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-base sm:text-lg md:text-xl font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
+            className={`px-4 py-2 rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-lg font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
           >
             →
           </button>
@@ -118,7 +118,7 @@ export default function RealPageFlipCalendar() {
 
         {/* Calendar with glass blur effect */}
         <div
-          className={`rounded-2xl shadow-2xl overflow-hidden ${isFlipping ? `flip-${flipDirection}` : ''} border-0 w-full sm:max-w-xs md:max-w-md lg:max-w-2xl`}
+          className={`rounded-2xl shadow-2xl overflow-hidden ${isFlipping ? `flip-${flipDirection}` : ''} border-0 w-96`}
           style={{
             transformStyle: 'preserve-3d' as any,
             transform: isFlipping

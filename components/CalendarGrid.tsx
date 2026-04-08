@@ -223,11 +223,11 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
       )}
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 gap-xs sm:gap-sm md:gap-md mb-xs sm:mb-sm md:mb-md">
+      <div className="grid grid-cols-7 gap-2 mb-2">
         {DAYS_OF_WEEK.map((day) => (
           <div
             key={day}
-            className={`h-8 sm:h-10 md:h-12 lg:h-14 flex items-center justify-center text-xs sm:text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}
+            className={`h-14 w-14 flex items-center justify-center text-xs sm:text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}
           >
             <span className="relative z-10">{day}</span>
           </div>
@@ -235,7 +235,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-xs sm:gap-sm md:gap-md">
+      <div className="grid grid-cols-7 gap-2">
         {calendarDays.map((day, index) => {
           const isWeekend = index % 7 >= 5
           const isToday = day === TODAY
@@ -250,7 +250,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
               onClick={() => day && handleDateClick(day)}
               disabled={!isClickable}
               className={`
-                h-8 sm:h-10 md:h-12 lg:h-14 flex items-center justify-center relative rounded text-base sm:text-lg font-bold
+                h-14 w-14 flex items-center justify-center relative rounded text-base font-bold
                 transition-all duration-quick bg-transparent border-0 outline-none
                 ${!isClickable ? 'cursor-default' : 'cursor-pointer'}
                 ${day === null ? 'pointer-events-none' : ''}
@@ -258,12 +258,13 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
                   ? theme === 'dark' ? 'text-black hover:bg-white/5' : 'text-black hover:bg-slate-200 hover:bg-opacity-20'
                   : ''
                 }
+                }
               `}
             >
               {day && (
                 <>
-                  {/* Colored gradient circle only for dates with notes */}
-                  {(hasNotes(day) || isPartOfRangeWithNotes(day)) && (
+                  {/* Colored gradient circle only for dates with notes - excluding TODAY */}
+                  {(hasNotes(day) || isPartOfRangeWithNotes(day)) && day !== TODAY && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       {/* Outer rotating ring */}
                       <div 
