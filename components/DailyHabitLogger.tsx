@@ -328,7 +328,7 @@ export default function DailyHabitLogger() {
 
       {/* Add Habit Form */}
       {showAddForm ? (
-        <div style={{ display: 'flex', gap: '6px', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', gap: '4px', marginBottom: '12px', flexWrap: 'wrap' }}>
           <input
             type="text"
             value={newHabitName}
@@ -341,9 +341,10 @@ export default function DailyHabitLogger() {
             autoFocus
             style={{
               flex: 1,
-              fontSize: '13px',
-              padding: '6px 8px',
-              borderRadius: '6px',
+              minWidth: '120px',
+              fontSize: '12px',
+              padding: '5px 6px',
+              borderRadius: '5px',
               background: 'rgba(255,255,255,0.08)',
               border: '0.5px solid rgba(255,255,255,0.15)',
               color: 'rgba(255,255,255,0.9)',
@@ -353,15 +354,16 @@ export default function DailyHabitLogger() {
           <button
             onClick={addHabit}
             style={{
-              padding: '6px 12px',
+              padding: '5px 10px',
               background: 'linear-gradient(135deg, #f97316, #a78bfa)',
               border: 'none',
-              borderRadius: '6px',
+              borderRadius: '5px',
               color: 'white',
               fontWeight: '600',
-              fontSize: '12px',
+              fontSize: '11px',
               cursor: 'pointer',
               transition: 'opacity 0.2s',
+              whiteSpace: 'nowrap',
             }}
             onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
@@ -371,13 +373,15 @@ export default function DailyHabitLogger() {
           <button
             onClick={() => setShowAddForm(false)}
             style={{
-              padding: '6px 12px',
+              padding: '5px 10px',
               background: 'rgba(255,255,255,0.08)',
               border: '0.5px solid rgba(255,255,255,0.15)',
-              borderRadius: '6px',
+              borderRadius: '5px',
               color: 'rgba(255,255,255,0.6)',
+              fontSize: '11px',
               cursor: 'pointer',
               transition: 'all 0.2s',
+              whiteSpace: 'nowrap',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(255,255,255,0.12)'
