@@ -181,6 +181,125 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
     setTouchEnd(e.changedTouches[0].clientX)
   }
 
+  // Render visual badges for events
+  const renderBadges = () => {
+    const badges: JSX.Element[] = []
+    const CELL_SIZE = 56
+    const CELL_GAP = 8
+
+    getDateRangesWithNotes().forEach((range, idx) => {
+      const startIdx = calendarDays.indexOf(range.startDate)
+      const endIdx = calendarDays.indexOf(range.endDate)
+      
+      if (startIdx === -1 || endIdx === -1) return
+
+      const startRow = Math.floor(startIdx / 7)
+      const startCol = startIdx % 7
+      const endRow = Math.floor(endIdx / 7)
+      const endCol = endIdx % 7
+
+      const color = localStorage.getItem(`color-${monthIndex}-${range.startDate}-${range.endDate}`) ||
+                    localStorage.getItem(`color-${monthIndex}-${range.startDate}`) || 'cyan'
+
+      if (range.startDate === range.endDate) {
+        // Single day - circle badge
+        const top = startRow * (CELL_SIZE + CELL_GAP) + CELL_SIZE / 2 - 18
+        const left = startCol * (CELL_SIZE + CELL_GAP) + CELL_SIZE / 2 - 18
+
+        badges.push(
+          <div
+            key={`badge-${idx}`}
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              top: `${top}px`,
+              left: `${left}px`,
+              width: '36px',
+              height: '36px',
+              backgroundImage: getGradientStyle(color),
+              opacity: 0.75,
+              zIndex: 5,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            }}
+          />
+        )
+      } else {
+        // Multi-day - rounded rectangle badges
+        if (startRow === endRow) {
+          // Single row
+          const top = startRow * (CELL_SIZE + CELL_GAP) + CELL_SIZE / 2 - 14
+          const left = startCol * (CELL_SIZE + CELL_GAP)
+          const width = (endCol - startCol + 1) * CELL_SIZE + (endCol - startCol) * CELL_GAP
+
+          badges.push(
+            <div
+              key={`badge-${idx}`}
+              className="absolute rounded-lg pointer-events-none flex items-center px-2 text-xs font-semibold text-white"
+              style={{
+                top: `${top}px`,
+                left: `${left}px`,
+                width: `${width}px`,
+                height: '28px',
+                backgroundImage: getGradientStyle(color),
+                opacity: 0.75,
+                zIndex: 5,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+              }}
+              title={localStorage.getItem(`notes-${monthIndex}-${range.startDate}-${range.endDate}`) || ''}
+            >
+              <span className="truncate text-[10px]">
+                {(localStorage.getItem(`notes-${monthIndex}-${range.startDate}-${range.endDate}`) || '').substring(0, 20)}
+              </span>
+            </div>
+          )
+        } else {
+          // Multi-row - simplified approach: render as series of rectangles
+          for (let r = startRow; r <= endRow; r++) {
+            const rowStartCol = r === startRow ? startCol : 0
+            const rowEndCol = r === endRow ? endCol : 6
+
+            const top = r * (CELL_SIZE + CELL_GAP) + CELL_SIZE / 2 - 14
+            const left = rowStartCol * (CELL_SIZE + CELL_GAP)
+            const width = (rowEndCol - rowStartCol + 1) * CELL_SIZE + (rowEndCol - rowStartCol) * CELL_GAP
+
+            badges.push(
+              <div
+                key={`badge-${idx}-row-${r}`}
+                className="absolute rounded-lg pointer-events-none flex items-center px-2 text-xs font-semibold text-white"
+                style={{
+                  top: `${top}px`,
+                  left: `${left}px`,
+                  width: `${width}px`,
+                  height: '28px',
+                  backgroundImage: getGradientStyle(color),
+                  opacity: 0.75,
+                  zIndex: 5,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                }}
+                title={localStorage.getItem(`notes-${monthIndex}-${range.startDate}-${range.endDate}`) || ''}
+              >
+                {r === startRow && (
+                  <span className="truncate text-[10px]">
+                    {(localStorage.getItem(`notes-${monthIndex}-${range.startDate}-${range.endDate}`) || '').substring(0, 20)}
+                  </span>
+                )}
+              </div>
+            )
+          }
+        }
+      }
+    })
+
+    return badges
+  }
+
+
+
   useEffect(() => {
     if (!touchStart || !touchEnd) return
     const distance = touchStart - touchEnd
@@ -198,7 +317,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
 
   return (
     <div 
-      className={`w-full bg-transparent p-sm sm:p-md md:p-lg lg:p-xl`}
+      className={`w-full bg-transparent p-sm sm:p-md md:p-lg lg:p-xl relative`}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -234,8 +353,15 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
         ))}
       </div>
 
-      {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-2">
+      {/* Calendar grid container */}
+      <div className="relative">
+        {/* Badges overlay layer */}
+        <div className="absolute inset-0 pointer-events-none z-5">
+          {renderBadges()}
+        </div>
+
+        {/* Calendar grid */}
+        <div className="grid grid-cols-7 gap-2 relative z-10">
         {calendarDays.map((day, index) => {
           const isWeekend = index % 7 >= 5
           const isToday = day === TODAY
