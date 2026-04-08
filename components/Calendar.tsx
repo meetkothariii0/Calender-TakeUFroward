@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
+import { Plus } from 'lucide-react'
 import CalendarGrid from './CalendarGrid'
 import NotesModal from './NotesModal'
 import EventsList from './EventsList'
@@ -21,6 +22,8 @@ export default function Calendar() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const [eventsRefresh, setEventsRefresh] = useState(0)
   const [mounted, setMounted] = useState(false)
+  const [selectedStartDate, setSelectedStartDate] = useState<number | null>(null)
+  const [selectedEndDate, setSelectedEndDate] = useState<number | null>(null)
   
   const calendarContainerRef = useRef<HTMLDivElement>(null)
   const eventsRef = useRef<HTMLDivElement>(null)
@@ -45,6 +48,9 @@ export default function Calendar() {
   useEffect(() => {
     if (mounted) {
       localStorage.setItem('calendar-month', currentMonth.toString())
+      // Reset selection when month changes
+      setSelectedStartDate(null)
+      setSelectedEndDate(null)
     }
   }, [currentMonth, mounted])
 
@@ -86,6 +92,11 @@ export default function Calendar() {
     setNotesStartDate(startDate)
     setNotesEndDate(endDate)
     setIsNotesModalOpen(true)
+  }
+
+  const handleSelectionChange = (startDate: number | null, endDate: number | null) => {
+    setSelectedStartDate(startDate)
+    setSelectedEndDate(endDate)
   }
 
   const handleCloseNotesModal = () => {
@@ -243,6 +254,62 @@ export default function Calendar() {
               overflowY: 'auto',
             }}
           >
+            {/* Add Notes Section - Top Left */}
+            {selectedStartDate && (
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '16px',
+                  left: '12px',
+                  zIndex: 10,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <span 
+                  style={{
+                    fontSize: '15px',
+                    fontWeight: '500',
+                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                  }}
+                >
+                  {selectedEndDate 
+                    ? `${MONTHS[currentMonth]} ${selectedStartDate}–${selectedEndDate}` 
+                    : `${MONTHS[currentMonth]} ${selectedStartDate}`
+                  }
+                </span>
+                <button
+                  onClick={() => handleOpenNotesModal(selectedStartDate, selectedEndDate)}
+                  style={{
+                    padding: '8px 14px',
+                    borderRadius: '6px',
+                    background: theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)',
+                    border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.3)' : '0.5px solid rgba(0, 0, 0, 0.15)',
+                    cursor: 'pointer',
+                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.75)',
+                    fontWeight: '600',
+                    fontSize: '13px',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.12)'
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)'
+                  }}
+                  title="Add notes"
+                >
+                  <Plus size={14} />
+                  Add notes
+                </button>
+              </div>
+            )}
+
             {/* Month Navigation - Top Center of Calendar */}
             <div 
               className="flex items-center justify-center gap-3 mb-4"
@@ -291,8 +358,10 @@ export default function Calendar() {
               {/* Month Label */}
               <h2 
                 style={{
-                  fontSize: '20px',
+                  fontSize: '15px',
                   fontWeight: '600',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
                   color: theme === 'dark' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)',
                   minWidth: '140px',
                   textAlign: 'center',
@@ -342,6 +411,7 @@ export default function Calendar() {
                 onOpenNotesModal={handleOpenNotesModal}
                 monthIndex={currentMonth}
                 theme={theme}
+                onSelectionChange={handleSelectionChange}
               />
             </div>
           </div>
@@ -374,7 +444,7 @@ export default function Calendar() {
             >
               <h3 
                 style={{
-                  fontSize: '11px',
+                  fontSize: '15px',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   color: theme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : '#000000',

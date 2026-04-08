@@ -132,7 +132,7 @@ export default function DailyHabitLogger({ theme = 'dark' }: DailyHabitLoggerPro
       <div style={{ marginBottom: '14px' }}>
         <h3 
           style={{
-            fontSize: '13px',
+            fontSize: '15px',
             fontWeight: '600',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',

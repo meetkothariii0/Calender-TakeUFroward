@@ -17,6 +17,7 @@ interface CalendarGridProps {
   onOpenNotesModal: (startDate: number, endDate: number | null) => void
   monthIndex: number
   theme?: 'dark' | 'light'
+  onSelectionChange?: (startDate: number | null, endDate: number | null) => void
 }
 
 const COLOR_MAPPINGS: { [key: string]: string } = {
@@ -41,7 +42,7 @@ const COLOR_DOT_MAPPINGS: { [key: string]: string } = {
   'cyan': '#0891b2',
 }
 
-export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'dark' }: CalendarGridProps) {
+export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'dark', onSelectionChange }: CalendarGridProps) {
   const [startDate, setStartDate] = useState<number | null>(null)
   const [endDate, setEndDate] = useState<number | null>(null)
   const [touchStart, setTouchStart] = useState<number | null>(null)
@@ -76,28 +77,35 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
   }
 
   const handleDateClick = (day: number) => {
+    let newStartDate = startDate
+    let newEndDate = endDate
+    
     if (startDate === null) {
+      newStartDate = day
+      newEndDate = null
       setStartDate(day)
       setEndDate(null)
       setPreviewColor('cyan')
     } else if (endDate === null) {
       if (day >= startDate) {
+        newEndDate = day
         setEndDate(day)
       } else {
+        newStartDate = day
+        newEndDate = null
         setStartDate(day)
         setEndDate(null)
       }
     } else {
+      newStartDate = day
+      newEndDate = null
       setStartDate(day)
       setEndDate(null)
       setPreviewColor('cyan')
     }
-  }
-
-  const handleAddNotesClick = () => {
-    if (startDate !== null) {
-      onOpenNotesModal(startDate, endDate)
-    }
+    
+    // Notify parent of selection change
+    onSelectionChange?.(newStartDate, newEndDate)
   }
 
   const isInRange = (day: number) => {
@@ -187,61 +195,6 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
 
   return (
     <div style={{ width: '100%' }}>
-      {/* Selection indicator with notes button */}
-      {startDate && (
-        <div 
-          style={{
-            marginBottom: '-26px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            flexWrap: 'wrap',
-            position: 'relative',
-            zIndex: 5,
-          }}
-        >
-          <span 
-            style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
-            }}
-          >
-            {endDate 
-              ? `${MONTH_NAMES[monthIndex]} ${startDate}–${endDate}` 
-              : `${MONTH_NAMES[monthIndex]} ${startDate}`
-            }
-          </span>
-          <button
-            onClick={handleAddNotesClick}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '6px',
-              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)',
-              border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.3)' : '0.5px solid rgba(0, 0, 0, 0.15)',
-              cursor: 'pointer',
-              color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.75)',
-              fontWeight: '600',
-              fontSize: '11px',
-              transition: 'all 0.2s',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-            }}
-            onMouseEnter={(e) => {
-              (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.12)'
-            }}
-            onMouseLeave={(e) => {
-              (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)'
-            }}
-            title="Add notes"
-          >
-            <Plus size={16} />
-            Add notes
-          </button>
-        </div>
-      )}
-
       {/* Weekday headers */}
       <div 
         style={{
