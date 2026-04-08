@@ -295,11 +295,11 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           let cellColor = theme === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.65)'
           let cellBorderRadius = '10px'
 
-          // Grey selection block while selecting - show grey for selected dates
-          if (!hasEventNote && (isSelectedDay || inSelection)) {
-            cellBackground = theme === 'dark' ? 'rgba(128, 128, 128, 0.4)' : 'rgba(128, 128, 128, 0.3)'
-            cellBorder = theme === 'dark' ? '1px solid rgba(128, 128, 128, 0.6)' : '1px solid rgba(128, 128, 128, 0.5)'
-            cellColor = theme === 'dark' ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'
+          // Grey selection block while selecting - show grey for selected dates AND dates in between
+          if (!hasEventNote && startDate !== null && ((isSelectedDay) || (startDate && endDate && inSelection))) {
+            cellBackground = theme === 'dark' ? 'rgba(128, 128, 128, 0.5)' : 'rgba(128, 128, 128, 0.4)'
+            cellBorder = theme === 'dark' ? '1px solid rgba(80, 80, 80, 0.8)' : '1px solid rgba(100, 100, 100, 0.7)'
+            cellColor = theme === 'dark' ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.85)'
           }
           // Today styling
           else if (isToday) {
@@ -332,7 +332,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
                 position: 'relative',
               }}
               onMouseEnter={(e) => {
-                if (isClickable && !hasEventNote) {
+                if (isClickable && !hasEventNote && startDate === null) {
                   (e.target as HTMLButtonElement).style.background = 'rgba(255,255,255,0.08)'
                 }
               }}
