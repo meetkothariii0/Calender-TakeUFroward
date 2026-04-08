@@ -166,10 +166,10 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
       {startDate && (
         <div 
           style={{
-            marginBottom: '16px',
+            marginBottom: '8px',
             display: 'flex',
             alignItems: 'center',
-            gap: '12px',
+            gap: '8px',
             flexWrap: 'wrap',
           }}
         >
@@ -220,7 +220,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
-          gap: '12px',
+          gap: '8px',
           marginBottom: '12px',
         }}
         onTouchStart={handleTouchStart}
@@ -249,7 +249,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(7, 1fr)',
-          gap: '12px',
+          gap: '8px',
         }}
       >
         {calendarDays.map((day, index) => {
@@ -353,7 +353,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
       {/* Info text */}
       <div 
         style={{
-          marginTop: '12px',
+          marginTop: '6px',
           fontSize: '12px',
           fontStyle: 'italic',
           color: 'rgba(255, 255, 255, 0.6)',
@@ -365,3 +365,6 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
     </div>
   )
 }
+
+
+

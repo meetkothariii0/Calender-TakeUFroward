@@ -72,7 +72,7 @@ export default function RealPageFlipCalendar() {
 
   return (
     <div 
-      className="relative w-full h-screen overflow-hidden"
+      className="relative w-full min-h-screen overflow-hidden"
       style={{
         background: 'linear-gradient(135deg, #0d0b1e 0%, #1a103a 40%, #0b1a2e 70%, #0e1f1a 100%)',
       }}
@@ -127,15 +127,107 @@ export default function RealPageFlipCalendar() {
 
       {/* Main Content - Grid Layout */}
       <div 
-        className="relative z-20 w-full h-full flex flex-col"
+        className="relative z-20 w-full min-h-screen flex flex-col"
         style={{
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
+          display: 'grid',
+          gridTemplateRows: 'auto auto',
+          gridTemplateColumns: '1fr',
+          gap: '24px',
+          padding: '48px',
         }}
       >
-        {/* Theme Toggle - Top Right */}
-        <div className="flex justify-end mb-4">
+        {/* Top Bar - Month Navigation & Theme Toggle */}
+        <div 
+          className="flex items-center justify-between"
+          style={{
+            gridColumn: '1 / -1',
+          }}
+        >
+          {/* Month Navigation - Left side */}
+          <div className="flex items-center gap-4">
+            {/* Previous Month Button */}
+            <button
+              onClick={handlePrevMonth}
+              disabled={isFlipping}
+              className="flex-shrink-0"
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '0.5px solid rgba(255, 255, 255, 0.18)',
+                backdropFilter: 'blur(6px)',
+                WebkitBackdropFilter: 'blur(6px)',
+                cursor: isFlipping ? 'not-allowed' : 'pointer',
+                opacity: isFlipping ? 0.5 : 1,
+                transition: 'background 0.2s',
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onMouseEnter={(e) => {
+                if (!isFlipping) (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.16)'
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.08)'
+              }}
+              title="Previous month"
+            >
+              ←
+            </button>
+
+            {/* Month Label */}
+            <h2 
+              style={{
+                fontSize: '28px',
+                fontWeight: '600',
+                color: 'rgba(255, 255, 255, 0.95)',
+                minWidth: '140px',
+                textAlign: 'center',
+              }}
+            >
+              {MONTHS[currentMonth]}
+            </h2>
+
+            {/* Next Month Button */}
+            <button
+              onClick={handleNextMonth}
+              disabled={isFlipping}
+              className="flex-shrink-0"
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '0.5px solid rgba(255, 255, 255, 0.18)',
+                backdropFilter: 'blur(6px)',
+                WebkitBackdropFilter: 'blur(6px)',
+                cursor: isFlipping ? 'not-allowed' : 'pointer',
+                opacity: isFlipping ? 0.5 : 1,
+                transition: 'background 0.2s',
+                color: 'rgba(255, 255, 255, 0.9)',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onMouseEnter={(e) => {
+                if (!isFlipping) (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.16)'
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.08)'
+              }}
+              title="Next month"
+            >
+              →
+            </button>
+          </div>
+
+          {/* Theme Toggle - Right side */}
           <button
             onClick={toggleTheme}
             style={{
@@ -165,16 +257,16 @@ export default function RealPageFlipCalendar() {
 
         {/* Main Content Grid - Calendar + Sidebar */}
         <div 
-          className="flex gap-4 w-full flex-1"
+          className="flex gap-6 w-full overflow-auto"
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 260px',
+            gridTemplateColumns: '1fr 280px',
             alignItems: 'start',
           }}
         >
           {/* Left Column - Calendar */}
           <div
-            className="overflow-visible relative"
+            className="overflow-visible"
             style={{
               position: 'relative',
               zIndex: 2,
@@ -183,7 +275,7 @@ export default function RealPageFlipCalendar() {
               borderRadius: '16px',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
-              padding: '40px 24px 24px 24px',
+              padding: '48px',
               transform: isFlipping
                 ? flipDirection === 'next'
                   ? 'rotateY(-90deg) translateZ(50px)'
@@ -192,123 +284,21 @@ export default function RealPageFlipCalendar() {
               transformOrigin: 'center',
               transition: isFlipping ? 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'none',
               transformStyle: 'preserve-3d' as any,
-              display: 'flex',
-              flexDirection: 'column',
-              height: 'fit-content',
             }}
           >
-            {/* Month Navigation - Positioned on top of calendar */}
-            <div 
-              className="flex items-center justify-between absolute"
-              style={{
-                top: '12px',
-                left: '24px',
-                right: '24px',
-                zIndex: 10,
-              }}
-            >
-              {/* Month Navigation - Left side */}
-              <div className="flex items-center gap-3">
-                {/* Previous Month Button */}
-                <button
-                  onClick={handlePrevMonth}
-                  disabled={isFlipping}
-                  className="flex-shrink-0"
-                  style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    border: '0.5px solid rgba(255, 255, 255, 0.18)',
-                    backdropFilter: 'blur(6px)',
-                    WebkitBackdropFilter: 'blur(6px)',
-                    cursor: isFlipping ? 'not-allowed' : 'pointer',
-                    opacity: isFlipping ? 0.5 : 1,
-                    transition: 'background 0.2s',
-                    color: 'rgba(255, 255, 255, 0.9)',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isFlipping) (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.16)'
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.08)'
-                  }}
-                  title="Previous month"
-                >
-                  ←
-                </button>
-
-                {/* Month Label */}
-                <h2 
-                  style={{
-                    fontSize: '18px',
-                    fontWeight: '600',
-                    color: 'rgba(255, 255, 255, 0.95)',
-                    minWidth: '110px',
-                    textAlign: 'center',
-                  }}
-                >
-                  {MONTHS[currentMonth]}
-                </h2>
-
-                {/* Next Month Button */}
-                <button
-                  onClick={handleNextMonth}
-                  disabled={isFlipping}
-                  className="flex-shrink-0"
-                  style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    border: '0.5px solid rgba(255, 255, 255, 0.18)',
-                    backdropFilter: 'blur(6px)',
-                    WebkitBackdropFilter: 'blur(6px)',
-                    cursor: isFlipping ? 'not-allowed' : 'pointer',
-                    opacity: isFlipping ? 0.5 : 1,
-                    transition: 'background 0.2s',
-                    color: 'rgba(255, 255, 255, 0.9)',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isFlipping) (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.16)'
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.08)'
-                  }}
-                  title="Next month"
-                >
-                  →
-                </button>
-              </div>
-            </div>
-
-            {/* Calendar Grid */}
-            <div style={{ marginTop: '8px' }}>
-              <CalendarGrid 
-                onOpenNotesModal={handleOpenNotesModal}
-                monthIndex={currentMonth}
-                theme={theme}
-              />
-            </div>
+            <CalendarGrid 
+              onOpenNotesModal={handleOpenNotesModal}
+              monthIndex={currentMonth}
+              theme={theme}
+            />
           </div>
 
           {/* Right Column - Sidebar (Events + Stats) */}
           <div 
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-4 overflow-y-auto"
             style={{
               position: 'relative',
               zIndex: 2,
-              height: 'fit-content',
             }}
           >
             {/* Events Panel */}
@@ -319,18 +309,19 @@ export default function RealPageFlipCalendar() {
                 borderRadius: '16px',
                 backdropFilter: 'blur(14px)',
                 WebkitBackdropFilter: 'blur(14px)',
-                padding: '12px',
-                maxHeight: '350px',
-                overflowY: 'auto',
+                padding: '16px',
+                flex: '1',
+                minHeight: '0',
+                overflow: 'y-auto',
               }}
             >
               <h3 
                 style={{
-                  fontSize: '11px',
+                  fontSize: '13px',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   color: 'rgba(255, 255, 255, 0.6)',
-                  marginBottom: '8px',
+                  marginBottom: '12px',
                   fontWeight: '600',
                 }}
               >
@@ -352,7 +343,8 @@ export default function RealPageFlipCalendar() {
                 borderRadius: '16px',
                 backdropFilter: 'blur(14px)',
                 WebkitBackdropFilter: 'blur(14px)',
-                padding: '12px',
+                padding: '16px',
+                flex: '0 0 auto',
               }}
             >
               <MiniStats monthIndex={currentMonth} theme={theme} />
@@ -374,3 +366,10 @@ export default function RealPageFlipCalendar() {
     </div>
   )
 }
+
+
+
+
+
+
+

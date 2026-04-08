@@ -68,7 +68,7 @@ export default function MiniStats({ monthIndex, theme = 'dark' }: MiniStatsProps
     <div>
       <h3 
         style={{
-          fontSize: '13px',
+          fontSize: '11px',
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
           color: 'rgba(255, 255, 255, 0.6)',
@@ -92,7 +92,7 @@ export default function MiniStats({ monthIndex, theme = 'dark' }: MiniStatsProps
           >
             <span
               style={{
-                fontSize: '12px',
+                fontSize: '10px',
                 color: 'rgba(255, 255, 255, 0.5)',
               }}
             >
@@ -100,7 +100,7 @@ export default function MiniStats({ monthIndex, theme = 'dark' }: MiniStatsProps
             </span>
             <span
               style={{
-                fontSize: '13px',
+                fontSize: '11px',
                 fontWeight: '600',
                 color: 'rgba(255, 255, 255, 0.9)',
               }}
@@ -113,3 +113,4 @@ export default function MiniStats({ monthIndex, theme = 'dark' }: MiniStatsProps
     </div>
   )
 }
+
