@@ -169,12 +169,14 @@ export default function RealPageFlipCalendar() {
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 260px',
-            alignItems: 'start',
+            alignItems: 'stretch',
+            height: '100%',
+            overflow: 'hidden',
           }}
         >
           {/* Left Column - Calendar */}
           <div
-            className="overflow-visible relative"
+            className="overflow-y-auto relative"
             style={{
               position: 'relative',
               zIndex: 2,
@@ -194,7 +196,8 @@ export default function RealPageFlipCalendar() {
               transformStyle: 'preserve-3d' as any,
               display: 'flex',
               flexDirection: 'column',
-              height: 'fit-content',
+              height: '100%',
+              overflowY: 'auto',
             }}
           >
             {/* Month Navigation - Positioned on top of calendar */}
@@ -308,7 +311,10 @@ export default function RealPageFlipCalendar() {
             style={{
               position: 'relative',
               zIndex: 2,
-              height: 'fit-content',
+              height: '100%',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
             }}
           >
             {/* Events Panel */}
