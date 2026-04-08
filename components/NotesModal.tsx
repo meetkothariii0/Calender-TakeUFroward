@@ -37,32 +37,69 @@ export default function NotesModal({
   const [notes, setNotes] = useState('')
   const [selectedColor, setSelectedColor] = useState('cyan')
   const [isSaved, setIsSaved] = useState(false)
+  const [existingNotes, setExistingNotes] = useState<Array<{text: string, color: string}>>([])
 
   useEffect(() => {
     if (isOpen && startDate !== null) {
-      // Load existing notes and color
+      // Load existing notes for this date
       const key = endDate ? `notes-${monthIndex}-${startDate}-${endDate}` : `notes-${monthIndex}-${startDate}`
-      const colorKey = endDate ? `color-${monthIndex}-${startDate}-${endDate}` : `color-${monthIndex}-${startDate}`
       const saved = localStorage.getItem(key)
-      const savedColor = localStorage.getItem(colorKey)
-      setNotes(saved || '')
-      setSelectedColor(savedColor || 'cyan')
+      
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved)
+          if (Array.isArray(parsed)) {
+            setExistingNotes(parsed)
+          } else {
+            // Legacy format - convert to array
+            const color = localStorage.getItem(endDate ? `color-${monthIndex}-${startDate}-${endDate}` : `color-${monthIndex}-${startDate}`) || 'cyan'
+            setExistingNotes([{ text: saved, color }])
+          }
+        } catch {
+          // Legacy format
+          const color = localStorage.getItem(endDate ? `color-${monthIndex}-${startDate}-${endDate}` : `color-${monthIndex}-${startDate}`) || 'cyan'
+          setExistingNotes([{ text: saved, color }])
+        }
+      } else {
+        setExistingNotes([])
+      }
+      
+      setNotes('')
+      setSelectedColor('cyan')
       setIsSaved(false)
     }
   }, [isOpen, startDate, endDate, monthIndex])
 
   const handleSave = () => {
-    if (startDate !== null) {
+    if (startDate !== null && notes.trim()) {
       const key = endDate ? `notes-${monthIndex}-${startDate}-${endDate}` : `notes-${monthIndex}-${startDate}`
-      const colorKey = endDate ? `color-${monthIndex}-${startDate}-${endDate}` : `color-${monthIndex}-${startDate}`
-      localStorage.setItem(key, notes)
-      localStorage.setItem(colorKey, selectedColor)
-      onSave(notes)
+      const newNote = { text: notes, color: selectedColor }
+      const updatedNotes = [...existingNotes, newNote]
+      
+      localStorage.setItem(key, JSON.stringify(updatedNotes))
+      setExistingNotes(updatedNotes)
+      setNotes('')
+      setSelectedColor('cyan')
       setIsSaved(true)
+      
       setTimeout(() => {
-        onClose()
         setIsSaved(false)
       }, 500)
+    }
+  }
+
+  const handleDeleteNote = (index: number) => {
+    if (startDate !== null) {
+      const key = endDate ? `notes-${monthIndex}-${startDate}-${endDate}` : `notes-${monthIndex}-${startDate}`
+      const updatedNotes = existingNotes.filter((_, i) => i !== index)
+      
+      if (updatedNotes.length === 0) {
+        localStorage.removeItem(key)
+      } else {
+        localStorage.setItem(key, JSON.stringify(updatedNotes))
+      }
+      
+      setExistingNotes(updatedNotes)
     }
   }
 
@@ -95,50 +132,86 @@ export default function NotesModal({
           </div>
 
           {/* Body */}
-          <div className="p-lg space-y-lg">
-            <textarea
-              autoFocus
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Add your thoughts, reminders, or plans..."
-              className={`
-                w-full h-40 p-md rounded-lg backdrop-blur-sm
-                text-sm font-sans resize-none
-                transition-all duration-quick
-                focus:outline-none focus:ring-2 focus:ring-offset-2
-                ${theme === 'dark' 
-                  ? 'bg-white/20 border border-white/40 text-white placeholder:text-white/50 focus:ring-white focus:ring-offset-slate-900/20' 
-                  : 'bg-slate-300/40 border border-slate-400/60 text-slate-900 placeholder:text-slate-600 focus:ring-slate-600 focus:ring-offset-garden-cream/20'
-                }
-              `}
-            />
-
-            {/* Color Picker */}
-            <div>
-              <label className={`text-sm font-semibold mb-md block ${theme === 'dark' ? 'text-white' : 'text-white'}`}>
-                Select Color for Note 🎨
-              </label>
-              <div className="grid grid-cols-4 gap-md">
-                {COLOR_OPTIONS.map((color) => (
-                  <button
-                    key={color.value}
-                    onClick={() => setSelectedColor(color.value)}
-                    className={`w-full aspect-square rounded-lg transition-all duration-quick ${
-                      selectedColor === color.value ? 'ring-4 ring-offset-2 scale-110' : 'hover:scale-105'
-                    } ${theme === 'dark' ? 'ring-white ring-offset-slate-900/20' : 'ring-white/80 ring-offset-slate-400/20'}`}
-                    title={color.name}
-                  >
-                    <div 
-                      className="w-full h-full rounded-lg shadow-lg transition-all duration-quick"
+          <div className="p-lg space-y-lg max-h-96 overflow-y-auto">
+            {/* Existing Notes */}
+            {existingNotes.length > 0 && (
+              <div>
+                <h4 className={`text-xs font-semibold mb-2 ${theme === 'dark' ? 'text-white/70' : 'text-slate-700'}`}>
+                  Saved Notes ({existingNotes.length})
+                </h4>
+                <div className="space-y-2">
+                  {existingNotes.map((noteItem, index) => (
+                    <div
+                      key={index}
+                      className={`p-3 rounded-lg flex justify-between items-start gap-2 ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-300/30'}`}
                       style={{
-                        background: `linear-gradient(135deg, ${color.light} 0%, ${color.bright} 100%)`
+                        borderLeft: `4px solid ${theme === 'dark' ? '#fca5a5' : '#fca5a5'}`
                       }}
-                    />
-                  </button>
-                ))}
+                    >
+                      <div className="flex-1 text-xs" style={{color: theme === 'dark' ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'}}>
+                        {noteItem.text}
+                      </div>
+                      <button
+                        onClick={() => handleDeleteNote(index)}
+                        className={`text-xs px-2 py-1 rounded transition-all ${theme === 'dark' ? 'bg-red-500/30 hover:bg-red-500/50 text-red-300' : 'bg-red-500/20 hover:bg-red-500/40 text-red-600'}`}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className={`my-3 h-px ${theme === 'dark' ? 'bg-white/10' : 'bg-slate-400/30'}`} />
+              </div>
+            )}
+
+            {/* Add New Note */}
+            <div>
+              <h4 className={`text-xs font-semibold mb-2 ${theme === 'dark' ? 'text-white/70' : 'text-slate-700'}`}>
+                Add New Note
+              </h4>
+              <textarea
+                autoFocus
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Add your thoughts, reminders, or plans..."
+                className={`
+                  w-full h-24 p-md rounded-lg backdrop-blur-sm
+                  text-sm font-sans resize-none
+                  transition-all duration-quick
+                  focus:outline-none focus:ring-2 focus:ring-offset-2
+                  ${theme === 'dark' 
+                    ? 'bg-white/20 border border-white/40 text-white placeholder:text-white/50 focus:ring-white focus:ring-offset-slate-900/20' 
+                    : 'bg-slate-300/40 border border-slate-400/60 text-slate-900 placeholder:text-slate-600 focus:ring-slate-600 focus:ring-offset-garden-cream/20'
+                  }
+                `}
+              />
+
+              {/* Color Picker */}
+              <div className="mt-3">
+                <label className={`text-xs font-semibold mb-2 block ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}>
+                  Select Color 🎨
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  {COLOR_OPTIONS.map((color) => (
+                    <button
+                      key={color.value}
+                      onClick={() => setSelectedColor(color.value)}
+                      className={`w-full aspect-square rounded-lg transition-all duration-quick ${
+                        selectedColor === color.value ? 'ring-2 ring-offset-1 scale-110' : 'hover:scale-105'
+                      } ${theme === 'dark' ? 'ring-white ring-offset-slate-900/20' : 'ring-white/80 ring-offset-slate-400/20'}`}
+                      title={color.name}
+                    >
+                      <div 
+                        className="w-full h-full rounded-lg shadow-lg transition-all duration-quick"
+                        style={{
+                          background: `linear-gradient(135deg, ${color.light} 0%, ${color.bright} 100%)`
+                        }}
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
 
           {/* Footer */}
           <div className={`border-t p-lg flex gap-md justify-end ${theme === 'dark' ? 'border-white/20' : 'border-slate-400/40'}`}>
@@ -157,18 +230,18 @@ export default function NotesModal({
             </button>
             <button
               onClick={handleSave}
-              disabled={isSaved}
+              disabled={!notes.trim()}
               className={`
                 px-lg py-md text-sm font-semibold rounded-lg
                 transition-all duration-quick drop-shadow-lg
-                ${isSaved ? 'opacity-80' : 'hover:scale-105'}
+                ${!notes.trim() ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
                 ${theme === 'dark'
                   ? 'text-white bg-slate-700 hover:bg-slate-600'
                   : 'text-white bg-slate-500 hover:bg-slate-400'
                 }
               `}
             >
-              {isSaved ? '✓ Saved' : 'Save Notes'}
+              {isSaved ? '✓ Added' : 'Add Note'}
             </button>
           </div>
         </div>

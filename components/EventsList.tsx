@@ -33,34 +33,75 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
     for (let day = 1; day <= DAYS_IN_MONTH[monthIndex]; day++) {
       // Single day notes
       const singleKey = `notes-${monthIndex}-${day}`
-      const singleColorKey = `color-${monthIndex}-${day}`
-      const singleNotes = localStorage.getItem(singleKey)
+      const singleData = localStorage.getItem(singleKey)
 
-      if (singleNotes && singleNotes.trim()) {
-        const color = localStorage.getItem(singleColorKey) || 'cyan'
-        allEvents.push({
-          date: day,
-          title: singleNotes,
-          color,
-          monthIndex
-        })
+      if (singleData && singleData.trim()) {
+        try {
+          const parsed = JSON.parse(singleData)
+          if (Array.isArray(parsed)) {
+            parsed.forEach((noteItem: any) => {
+              allEvents.push({
+                date: day,
+                title: noteItem.text,
+                color: noteItem.color || 'cyan',
+                monthIndex
+              })
+            })
+          } else {
+            // Legacy format
+            allEvents.push({
+              date: day,
+              title: singleData,
+              color: 'cyan',
+              monthIndex
+            })
+          }
+        } catch {
+          allEvents.push({
+            date: day,
+            title: singleData,
+            color: 'cyan',
+            monthIndex
+          })
+        }
       }
 
       // Range notes
       for (let endDay = day; endDay <= DAYS_IN_MONTH[monthIndex]; endDay++) {
         const rangeKey = `notes-${monthIndex}-${day}-${endDay}`
-        const rangeColorKey = `color-${monthIndex}-${day}-${endDay}`
-        const rangeNotes = localStorage.getItem(rangeKey)
+        const rangeData = localStorage.getItem(rangeKey)
 
-        if (rangeNotes && rangeNotes.trim()) {
-          const color = localStorage.getItem(rangeColorKey) || 'red'
-          allEvents.push({
-            date: day,
-            endDate: endDay,
-            title: rangeNotes,
-            color,
-            monthIndex
-          })
+        if (rangeData && rangeData.trim()) {
+          try {
+            const parsed = JSON.parse(rangeData)
+            if (Array.isArray(parsed)) {
+              parsed.forEach((noteItem: any) => {
+                allEvents.push({
+                  date: day,
+                  endDate: endDay,
+                  title: noteItem.text,
+                  color: noteItem.color || 'red',
+                  monthIndex
+                })
+              })
+            } else {
+              allEvents.push({
+                date: day,
+                endDate: endDay,
+                title: rangeData,
+                color: 'red',
+                monthIndex
+              })
+            }
+          } catch {
+            allEvents.push({
+              date: day,
+              endDate: endDay,
+              title: rangeData,
+              color: 'red',
+              monthIndex
+            })
+          }
         }
       }
     }
@@ -68,11 +109,28 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
     setEvents(allEvents)
   }
 
-  const handleDeleteEvent = (date: number, endDate?: number) => {
+  const handleDeleteEvent = (date: number, endDate?: number, noteIndex?: number) => {
     const key = endDate ? `notes-${monthIndex}-${date}-${endDate}` : `notes-${monthIndex}-${date}`
-    const colorKey = endDate ? `color-${monthIndex}-${date}-${endDate}` : `color-${monthIndex}-${date}`
-    localStorage.removeItem(key)
-    localStorage.removeItem(colorKey)
+    const data = localStorage.getItem(key)
+    
+    if (data) {
+      try {
+        const parsed = JSON.parse(data)
+        if (Array.isArray(parsed) && noteIndex !== undefined) {
+          const updated = parsed.filter((_, i) => i !== noteIndex)
+          if (updated.length === 0) {
+            localStorage.removeItem(key)
+          } else {
+            localStorage.setItem(key, JSON.stringify(updated))
+          }
+        } else {
+          localStorage.removeItem(key)
+        }
+      } catch {
+        localStorage.removeItem(key)
+      }
+    }
+    
     onDeleteEvent?.(date, endDate)
     loadEvents()
   }

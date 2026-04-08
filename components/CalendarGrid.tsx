@@ -287,6 +287,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           const inSelection = day ? isInRange(day) : false
           const isStartSelection = day ? isStartDate(day) : false
           const isEndSelection = day ? isEndDate(day) : false
+          const isSelectedDay = day === startDate || day === endDate
 
 
           let cellBackground = 'transparent'
@@ -294,13 +295,11 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           let cellColor = theme === 'dark' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.65)'
           let cellBorderRadius = '10px'
 
-          // Grey selection block while selecting (when startDate is set)
-          if (startDate !== null && !hasEventNote) {
-            if (inSelection) {
-              cellBackground = theme === 'dark' ? 'rgba(128, 128, 128, 0.4)' : 'rgba(128, 128, 128, 0.3)'
-              cellBorder = theme === 'dark' ? '1px solid rgba(128, 128, 128, 0.6)' : '1px solid rgba(128, 128, 128, 0.5)'
-              cellColor = theme === 'dark' ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'
-            }
+          // Grey selection block while selecting - show grey for selected dates
+          if (!hasEventNote && (isSelectedDay || inSelection)) {
+            cellBackground = theme === 'dark' ? 'rgba(128, 128, 128, 0.4)' : 'rgba(128, 128, 128, 0.3)'
+            cellBorder = theme === 'dark' ? '1px solid rgba(128, 128, 128, 0.6)' : '1px solid rgba(128, 128, 128, 0.5)'
+            cellColor = theme === 'dark' ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)'
           }
           // Today styling
           else if (isToday) {
