@@ -191,7 +191,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
       {startDate && (
         <div 
           style={{
-            marginBottom: '-10px',
+            marginBottom: '-26px',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
@@ -202,7 +202,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
         >
           <span 
             style={{
-              fontSize: '10px',
+              fontSize: '14px',
               fontWeight: '500',
               color: theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
             }}

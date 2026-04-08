@@ -132,7 +132,7 @@ export default function DailyHabitLogger({ theme = 'dark' }: DailyHabitLoggerPro
       <div style={{ marginBottom: '14px' }}>
         <h3 
           style={{
-            fontSize: '11px',
+            fontSize: '13px',
             fontWeight: '600',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
@@ -157,7 +157,7 @@ export default function DailyHabitLogger({ theme = 'dark' }: DailyHabitLoggerPro
         {habits.length === 0 ? (
           <p
             style={{
-              fontSize: '12px',
+              fontSize: '14px',
               color: theme === 'dark' ? 'rgba(255,255,255,0.35)' : 'rgba(0, 0, 0, 0.35)',
               textAlign: 'center',
               padding: '20px 0',
@@ -221,7 +221,7 @@ export default function DailyHabitLogger({ theme = 'dark' }: DailyHabitLoggerPro
                     autoFocus
                     style={{
                       flex: 1,
-                      fontSize: '13px',
+                      fontSize: '14px',
                       padding: '4px 6px',
                       borderRadius: '4px',
                       background: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0, 0, 0, 0.05)',
@@ -233,7 +233,7 @@ export default function DailyHabitLogger({ theme = 'dark' }: DailyHabitLoggerPro
                 ) : (
                   <span
                     style={{
-                      fontSize: '13px',
+                      fontSize: '14px',
                       color: habit.completed ? (theme === 'dark' ? 'rgba(255,255,255,0.35)' : 'rgba(0, 0, 0, 0.35)') : (theme === 'dark' ? 'rgba(255,255,255,0.75)' : 'rgba(0, 0, 0, 0.75)'),
                       textDecoration: habit.completed ? 'line-through' : 'none',
                       transition: 'all 0.15s ease',

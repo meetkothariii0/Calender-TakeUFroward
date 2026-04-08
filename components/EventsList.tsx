@@ -183,7 +183,7 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
       {events.length === 0 ? (
         <p 
           style={{
-            fontSize: '12px',
+            fontSize: '14px',
             color: theme === 'dark' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.35)',
             textAlign: 'center',
             fontStyle: 'italic',
@@ -233,7 +233,7 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div 
                       style={{
-                        fontSize: '10px',
+                        fontSize: '13px',
                         fontWeight: '700',
                         letterSpacing: '0.1em',
                         marginBottom: '6px',
@@ -245,7 +245,7 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
                     </div>
                     <p 
                       style={{
-                        fontSize: '12px',
+                        fontSize: '14px',
                         lineHeight: '1.4',
                         color: styling.textColor,
                         wordBreak: 'break-word',
