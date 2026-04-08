@@ -41,19 +41,25 @@ export default function RealPageFlipCalendar() {
       
       // Animate out
       gsap.to([calendarContainerRef.current, eventsRef.current, habitsRef.current], {
-        opacity: 0.3,
+        opacity: 0,
         y: direction * 20,
         duration: 0.3,
         ease: 'power2.in'
       })
     } else if (!isFlipping && calendarContainerRef.current) {
-      // Animate in
-      gsap.to([calendarContainerRef.current, eventsRef.current, habitsRef.current], {
-        opacity: 1,
-        y: 0,
-        duration: 0.4,
-        ease: 'power2.out'
-      })
+      // Animate in with fade-in effect
+      gsap.fromTo([calendarContainerRef.current, eventsRef.current, habitsRef.current], 
+        {
+          opacity: 0,
+          y: flipDirection === 'next' ? 20 : -20,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: 'power2.out'
+        }
+      )
     }
   }, [isFlipping, flipDirection])
 

@@ -147,29 +147,33 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
     if (color === 'red') {
       if (theme === 'light') {
         return {
-          gradient: 'linear-gradient(135deg, rgba(200,40,40,0.75), rgba(180,45,45,0.65))',
-          border: 'rgba(220,80,80,0.4)',
-          dateColor: '#dc2626',
+          gradient: 'linear-gradient(135deg, rgba(150,25,25,0.95), rgba(120,20,20,0.85))',
+          border: 'rgba(200,60,60,0.5)',
+          dateColor: '#fca5a5',
+          textColor: 'rgba(255, 255, 255, 0.95)',
         }
       }
       return {
         gradient: 'linear-gradient(135deg, rgba(185,28,28,0.65), rgba(127,29,29,0.5))',
         border: 'rgba(252,165,165,0.2)',
         dateColor: '#fca5a5',
+        textColor: 'rgba(255, 255, 255, 0.9)',
       }
     } else {
       // Teal/cyan events
       if (theme === 'light') {
         return {
-          gradient: 'linear-gradient(135deg, rgba(20,100,120,0.8), rgba(15,80,100,0.7))',
-          border: 'rgba(60,180,200,0.4)',
-          dateColor: '#0891b2',
+          gradient: 'linear-gradient(135deg, rgba(15,75,90,0.95), rgba(10,60,75,0.85))',
+          border: 'rgba(80,200,220,0.5)',
+          dateColor: '#5eead4',
+          textColor: 'rgba(255, 255, 255, 0.95)',
         }
       }
       return {
         gradient: 'linear-gradient(135deg, rgba(14,116,144,0.65), rgba(6,78,59,0.5))',
         border: 'rgba(94,234,212,0.2)',
         dateColor: '#5eead4',
+        textColor: 'rgba(255, 255, 255, 0.9)',
       }
     }
   }
@@ -243,7 +247,7 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
                       style={{
                         fontSize: '12px',
                         lineHeight: '1.4',
-                        color: 'rgba(255, 255, 255, 0.9)',
+                        color: styling.textColor,
                         wordBreak: 'break-word',
                       }}
                     >
