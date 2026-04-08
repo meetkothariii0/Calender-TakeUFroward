@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Schibsted_Grotesk, Inter } from 'next/font/google'
 
@@ -13,6 +13,13 @@ const inter = Inter({
   weight: ['400', '500', '600', '700'],
   variable: '--font-inter'
 })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
 
 export const metadata: Metadata = {
   title: 'Wall Calendar',

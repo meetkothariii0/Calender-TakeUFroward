@@ -48,11 +48,22 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
   const [previewColor, setPreviewColor] = useState<string>('cyan')
+  const [isDesktop, setIsDesktop] = useState(true)
 
   // Reset selection when month changes
   useEffect(() => {
     setStartDate(null)
     setEndDate(null)
+    
+    // Track window size
+    setIsDesktop(window.innerWidth >= 1024)
+    
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [monthIndex])
 
   const totalDays = DAYS_IN_MONTH[monthIndex]
@@ -210,7 +221,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           <div
             key={day}
             style={{
-              fontSize: '11px',
+              fontSize: isDesktop ? '11px' : '10px',
               letterSpacing: '0.08em',
               color: theme === 'dark' ? 'rgba(255,255,255,0.38)' : 'rgba(0, 0, 0, 0.45)',
               textTransform: 'uppercase',
@@ -273,7 +284,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '14px',
+                fontSize: isDesktop ? '14px' : '12px',
                 fontWeight: '600',
                 color: cellColor,
                 background: cellBackground,

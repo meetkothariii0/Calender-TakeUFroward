@@ -24,6 +24,7 @@ export default function Calendar() {
   const [mounted, setMounted] = useState(false)
   const [selectedStartDate, setSelectedStartDate] = useState<number | null>(null)
   const [selectedEndDate, setSelectedEndDate] = useState<number | null>(null)
+  const [isDesktop, setIsDesktop] = useState(true)
   
   const calendarContainerRef = useRef<HTMLDivElement>(null)
   const eventsRef = useRef<HTMLDivElement>(null)
@@ -42,6 +43,17 @@ export default function Calendar() {
     }
     
     setMounted(true)
+    
+    // Check if desktop on mount
+    setIsDesktop(window.innerWidth >= 1024)
+    
+    // Handle window resize
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   // Save month to localStorage whenever it changes
@@ -191,6 +203,8 @@ export default function Calendar() {
         style={{
           display: 'flex',
           flexDirection: 'column',
+          paddingLeft: isDesktop ? '12px' : '8px',
+          paddingRight: isDesktop ? '12px' : '8px',
         }}
       >
         {/* Theme Toggle - Top Right */}
@@ -225,15 +239,16 @@ export default function Calendar() {
 
         {/* Main Content Grid - Calendar + Sidebar */}
         <div 
-          className="flex gap-2 w-full flex-1 max-w-full"
+          className="flex flex-col gap-2 w-full flex-1 max-w-full"
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1fr) minmax(250px, 300px)',
+            display: isDesktop ? 'grid' : 'flex',
+            gridTemplateColumns: isDesktop ? 'minmax(0, 1fr) minmax(250px, 300px)' : undefined,
             gridTemplateRows: 'auto',
             alignItems: 'stretch',
-            height: '100%',
-            overflow: 'hidden',
+            height: isDesktop ? '100%' : 'auto',
+            overflow: isDesktop ? 'hidden' : 'visible',
             gap: '4px',
+            flexDirection: 'column',
           }}
         >
           {/* Left Column - Calendar */}
@@ -247,11 +262,12 @@ export default function Calendar() {
               borderRadius: '16px',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
-              padding: '60px 12px 8px 12px',
+              padding: isDesktop ? '60px 12px 8px 12px' : '60px 8px 8px 8px',
               display: 'flex',
               flexDirection: 'column',
-              height: '100%',
-              overflowY: 'auto',
+              height: isDesktop ? '100%' : 'auto',
+              overflowY: isDesktop ? 'auto' : 'visible',
+              minHeight: isDesktop ? undefined : '0',
             }}
           >
             {/* Add Notes Section - Top Left */}
@@ -260,19 +276,23 @@ export default function Calendar() {
                 style={{
                   position: 'absolute',
                   top: '16px',
-                  left: '12px',
+                  left: isDesktop ? '12px' : '8px',
                   zIndex: 10,
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
                   flexWrap: 'wrap',
+                  right: isDesktop ? undefined : '8px',
+                  justifyContent: isDesktop ? 'flex-start' : 'space-between',
+                  width: isDesktop ? 'auto' : 'calc(100% - 16px)',
                 }}
               >
                 <span 
                   style={{
-                    fontSize: '15px',
+                    fontSize: isDesktop ? '15px' : '13px',
                     fontWeight: '500',
                     color: theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {selectedEndDate 
@@ -283,18 +303,20 @@ export default function Calendar() {
                 <button
                   onClick={() => handleOpenNotesModal(selectedStartDate, selectedEndDate)}
                   style={{
-                    padding: '8px 14px',
+                    padding: isDesktop ? '8px 14px' : '6px 10px',
                     borderRadius: '6px',
                     background: theme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.08)',
                     border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.3)' : '0.5px solid rgba(0, 0, 0, 0.15)',
                     cursor: 'pointer',
                     color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.75)',
                     fontWeight: '600',
-                    fontSize: '13px',
+                    fontSize: isDesktop ? '13px' : '12px',
                     transition: 'all 0.2s',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
                     (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.12)'
@@ -304,8 +326,8 @@ export default function Calendar() {
                   }}
                   title="Add notes"
                 >
-                  <Plus size={14} />
-                  Add notes
+                  <Plus size={isDesktop ? 14 : 12} />
+                  {isDesktop ? 'Add notes' : 'Add'}
                 </button>
               </div>
             )}
@@ -327,8 +349,8 @@ export default function Calendar() {
                 disabled={isAnimating}
                 className="flex-shrink-0"
                 style={{
-                  width: '32px',
-                  height: '32px',
+                  width: isDesktop ? '32px' : '28px',
+                  height: isDesktop ? '32px' : '28px',
                   borderRadius: '50%',
                   background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
                   border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.18)' : '0.5px solid rgba(0, 0, 0, 0.15)',
@@ -338,7 +360,7 @@ export default function Calendar() {
                   opacity: isAnimating ? 0.5 : 1,
                   transition: 'background 0.2s',
                   color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.7)',
-                  fontSize: '18px',
+                  fontSize: isDesktop ? '18px' : '16px',
                   fontWeight: 'bold',
                   display: 'flex',
                   alignItems: 'center',
@@ -358,13 +380,14 @@ export default function Calendar() {
               {/* Month Label */}
               <h2 
                 style={{
-                  fontSize: '15px',
+                  fontSize: isDesktop ? '15px' : '14px',
                   fontWeight: '600',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   color: theme === 'dark' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)',
-                  minWidth: '140px',
+                  minWidth: isDesktop ? '140px' : 'auto',
                   textAlign: 'center',
+                  maxWidth: isDesktop ? undefined : '100px',
                 }}
               >
                 {MONTHS[currentMonth]}
@@ -376,8 +399,8 @@ export default function Calendar() {
                 disabled={isAnimating}
                 className="flex-shrink-0"
                 style={{
-                  width: '32px',
-                  height: '32px',
+                  width: isDesktop ? '32px' : '28px',
+                  height: isDesktop ? '32px' : '28px',
                   borderRadius: '50%',
                   background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
                   border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.18)' : '0.5px solid rgba(0, 0, 0, 0.15)',
@@ -387,7 +410,7 @@ export default function Calendar() {
                   opacity: isAnimating ? 0.5 : 1,
                   transition: 'background 0.2s',
                   color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.7)',
-                  fontSize: '18px',
+                  fontSize: isDesktop ? '18px' : '16px',
                   fontWeight: 'bold',
                   display: 'flex',
                   alignItems: 'center',
@@ -422,10 +445,11 @@ export default function Calendar() {
             style={{
               position: 'relative',
               zIndex: 2,
-              height: '100%',
-              overflow: 'hidden',
+              height: isDesktop ? '100%' : 'auto',
+              overflow: isDesktop ? 'hidden' : 'visible',
               display: 'flex',
               flexDirection: 'column',
+              minHeight: isDesktop ? undefined : '0',
             }}
           >
             {/* Events Panel */}
@@ -438,8 +462,8 @@ export default function Calendar() {
                 backdropFilter: 'blur(14px)',
                 WebkitBackdropFilter: 'blur(14px)',
                 padding: '12px',
-                maxHeight: '280px',
-                overflowY: 'auto',
+                maxHeight: isDesktop ? '280px' : 'auto',
+                overflowY: isDesktop ? 'auto' : 'visible',
               }}
             >
               <h3 
