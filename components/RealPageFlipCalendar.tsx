@@ -127,10 +127,10 @@ export default function RealPageFlipCalendar() {
 
       {/* Main Content - Grid Layout */}
       <div 
-        className="relative z-20 w-full h-screen flex flex-col"
+        className="relative z-20 w-full min-h-screen flex flex-col"
         style={{
           display: 'grid',
-          gridTemplateRows: 'auto 1fr',
+          gridTemplateRows: 'auto auto',
           gridTemplateColumns: '1fr',
           gap: '24px',
           padding: '48px',
@@ -257,7 +257,7 @@ export default function RealPageFlipCalendar() {
 
         {/* Main Content Grid - Calendar + Sidebar */}
         <div 
-          className="flex gap-6 w-full h-full overflow-hidden"
+          className="flex gap-6 w-full overflow-auto"
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 280px',
@@ -266,7 +266,7 @@ export default function RealPageFlipCalendar() {
         >
           {/* Left Column - Calendar */}
           <div
-            className="overflow-hidden"
+            className="overflow-visible"
             style={{
               position: 'relative',
               zIndex: 2,
@@ -295,7 +295,7 @@ export default function RealPageFlipCalendar() {
 
           {/* Right Column - Sidebar (Events + Stats) */}
           <div 
-            className="flex flex-col gap-4 h-full overflow-y-auto"
+            className="flex flex-col gap-4 overflow-y-auto"
             style={{
               position: 'relative',
               zIndex: 2,
@@ -366,4 +366,10 @@ export default function RealPageFlipCalendar() {
     </div>
   )
 }
+
+
+
+
+
+
 
