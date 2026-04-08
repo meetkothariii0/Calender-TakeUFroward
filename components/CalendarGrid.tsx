@@ -301,7 +301,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, theme = 'da
           // Grey selection block while selecting - show grey for selected dates AND dates in between
           if (!hasEventNote && startDate !== null && ((isSelectedDay) || (startDate && endDate && inSelection))) {
             cellBackground = theme === 'dark' ? 'rgba(128, 128, 128, 0.5)' : 'rgba(128, 128, 128, 0.4)'
-            cellBorder = theme === 'dark' ? '1px solid rgba(80, 80, 80, 0.8)' : '1px solid rgba(100, 100, 100, 0.7)'
+            // Keep the original grid border - don't override it
             cellColor = theme === 'dark' ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.85)'
           }
           // Today styling
