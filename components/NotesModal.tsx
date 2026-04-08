@@ -82,6 +82,9 @@ export default function NotesModal({
       setSelectedColor('cyan')
       setIsSaved(true)
       
+      // Trigger parent component to refresh events immediately
+      onSave(notes)
+      
       setTimeout(() => {
         setIsSaved(false)
       }, 500)
@@ -100,6 +103,9 @@ export default function NotesModal({
       }
       
       setExistingNotes(updatedNotes)
+      
+      // Trigger parent component to refresh events
+      onSave('')
     }
   }
 

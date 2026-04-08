@@ -20,18 +20,33 @@ export default function Calendar() {
   const [notesEndDate, setNotesEndDate] = useState<number | null>(null)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const [eventsRefresh, setEventsRefresh] = useState(0)
+  const [mounted, setMounted] = useState(false)
   
   const calendarContainerRef = useRef<HTMLDivElement>(null)
   const eventsRef = useRef<HTMLDivElement>(null)
   const habitsRef = useRef<HTMLDivElement>(null)
 
-  // Initialize theme from localStorage
+  // Initialize theme and month from localStorage
   useEffect(() => {
     const savedTheme = localStorage.getItem('calendar-theme') as 'dark' | 'light' | null
     if (savedTheme) {
       setTheme(savedTheme)
     }
+    
+    const savedMonth = localStorage.getItem('calendar-month')
+    if (savedMonth) {
+      setCurrentMonth(parseInt(savedMonth, 10))
+    }
+    
+    setMounted(true)
   }, [])
+
+  // Save month to localStorage whenever it changes
+  useEffect(() => {
+    if (mounted) {
+      localStorage.setItem('calendar-month', currentMonth.toString())
+    }
+  }, [currentMonth, mounted])
 
   // Animate containers when month changes
   useEffect(() => {
