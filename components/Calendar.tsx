@@ -12,10 +12,9 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ]
 
-export default function RealPageFlipCalendar() {
+export default function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(3) // April
-  const [isFlipping, setIsFlipping] = useState(false)
-  const [flipDirection, setFlipDirection] = useState<'next' | 'prev'>('next')
+  const [isAnimating, setIsAnimating] = useState(false)
   const [isNotesModalOpen, setIsNotesModalOpen] = useState(false)
   const [notesStartDate, setNotesStartDate] = useState<number | null>(null)
   const [notesEndDate, setNotesEndDate] = useState<number | null>(null)
@@ -36,32 +35,30 @@ export default function RealPageFlipCalendar() {
 
   // Animate containers when month changes
   useEffect(() => {
-    if (isFlipping && calendarContainerRef.current) {
-      const direction = flipDirection === 'next' ? 1 : -1
-      
+    if (isAnimating && calendarContainerRef.current) {
       // Animate out
       gsap.to([calendarContainerRef.current, eventsRef.current, habitsRef.current], {
         opacity: 0,
-        y: direction * 20,
-        duration: 0.3,
+        y: -10,
+        duration: 0.25,
         ease: 'power2.in'
       })
-    } else if (!isFlipping && calendarContainerRef.current) {
+    } else if (!isAnimating && calendarContainerRef.current) {
       // Animate in with fade-in effect
       gsap.fromTo([calendarContainerRef.current, eventsRef.current, habitsRef.current], 
         {
           opacity: 0,
-          y: flipDirection === 'next' ? 20 : -20,
+          y: 10,
         },
         {
           opacity: 1,
           y: 0,
-          duration: 0.5,
+          duration: 0.4,
           ease: 'power2.out'
         }
       )
     }
-  }, [isFlipping, flipDirection])
+  }, [isAnimating])
 
   // Save theme preference
   const toggleTheme = () => {
@@ -85,23 +82,21 @@ export default function RealPageFlipCalendar() {
   }
 
   const handleNextMonth = () => {
-    if (isFlipping) return
-    setFlipDirection('next')
-    setIsFlipping(true)
+    if (isAnimating) return
+    setIsAnimating(true)
     setTimeout(() => {
       setCurrentMonth((prev) => (prev === 11 ? 0 : prev + 1))
-      setIsFlipping(false)
-    }, 600)
+      setIsAnimating(false)
+    }, 500)
   }
 
   const handlePrevMonth = () => {
-    if (isFlipping) return
-    setFlipDirection('prev')
-    setIsFlipping(true)
+    if (isAnimating) return
+    setIsAnimating(true)
     setTimeout(() => {
       setCurrentMonth((prev) => (prev === 0 ? 11 : prev - 1))
-      setIsFlipping(false)
-    }, 600)
+      setIsAnimating(false)
+    }, 500)
   }
 
   return (
@@ -225,14 +220,6 @@ export default function RealPageFlipCalendar() {
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
               padding: window.innerWidth < 768 ? '60px 8px 8px 8px' : '60px 12px 8px 12px',
-              transform: isFlipping
-                ? flipDirection === 'next'
-                  ? 'rotateY(-90deg) translateZ(50px)'
-                  : 'rotateY(90deg) translateZ(50px)'
-                : 'rotateY(0deg)',
-              transformOrigin: 'center',
-              transition: isFlipping ? 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'none',
-              transformStyle: 'preserve-3d' as any,
               display: 'flex',
               flexDirection: 'column',
               height: '100%',
@@ -253,7 +240,7 @@ export default function RealPageFlipCalendar() {
               {/* Previous Month Button */}
               <button
                 onClick={handlePrevMonth}
-                disabled={isFlipping}
+                disabled={isAnimating}
                 className="flex-shrink-0"
                 style={{
                   width: '32px',
@@ -263,8 +250,8 @@ export default function RealPageFlipCalendar() {
                   border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.18)' : '0.5px solid rgba(0, 0, 0, 0.15)',
                   backdropFilter: 'blur(6px)',
                   WebkitBackdropFilter: 'blur(6px)',
-                  cursor: isFlipping ? 'not-allowed' : 'pointer',
-                  opacity: isFlipping ? 0.5 : 1,
+                  cursor: isAnimating ? 'not-allowed' : 'pointer',
+                  opacity: isAnimating ? 0.5 : 1,
                   transition: 'background 0.2s',
                   color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.7)',
                   fontSize: '18px',
@@ -274,7 +261,7 @@ export default function RealPageFlipCalendar() {
                   justifyContent: 'center',
                 }}
                 onMouseEnter={(e) => {
-                  if (!isFlipping) (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.15)'
+                  if (!isAnimating) (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.15)'
                 }}
                 onMouseLeave={(e) => {
                   (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'
@@ -300,7 +287,7 @@ export default function RealPageFlipCalendar() {
               {/* Next Month Button */}
               <button
                 onClick={handleNextMonth}
-                disabled={isFlipping}
+                disabled={isAnimating}
                 className="flex-shrink-0"
                 style={{
                   width: '32px',
@@ -310,8 +297,8 @@ export default function RealPageFlipCalendar() {
                   border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.18)' : '0.5px solid rgba(0, 0, 0, 0.15)',
                   backdropFilter: 'blur(6px)',
                   WebkitBackdropFilter: 'blur(6px)',
-                  cursor: isFlipping ? 'not-allowed' : 'pointer',
-                  opacity: isFlipping ? 0.5 : 1,
+                  cursor: isAnimating ? 'not-allowed' : 'pointer',
+                  opacity: isAnimating ? 0.5 : 1,
                   transition: 'background 0.2s',
                   color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.7)',
                   fontSize: '18px',
@@ -321,7 +308,7 @@ export default function RealPageFlipCalendar() {
                   justifyContent: 'center',
                 }}
                 onMouseEnter={(e) => {
-                  if (!isFlipping) (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.15)'
+                  if (!isAnimating) (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.15)'
                 }}
                 onMouseLeave={(e) => {
                   (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'
