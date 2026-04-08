@@ -145,6 +145,13 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
   // Get gradient and colors for event card
   const getEventStyling = (color: string) => {
     if (color === 'red') {
+      if (theme === 'light') {
+        return {
+          gradient: 'linear-gradient(135deg, rgba(200,40,40,0.75), rgba(180,45,45,0.65))',
+          border: 'rgba(220,80,80,0.4)',
+          dateColor: '#dc2626',
+        }
+      }
       return {
         gradient: 'linear-gradient(135deg, rgba(185,28,28,0.65), rgba(127,29,29,0.5))',
         border: 'rgba(252,165,165,0.2)',
@@ -152,6 +159,13 @@ export default function EventsList({ monthIndex, theme = 'dark', onDeleteEvent }
       }
     } else {
       // Teal/cyan events
+      if (theme === 'light') {
+        return {
+          gradient: 'linear-gradient(135deg, rgba(20,100,120,0.8), rgba(15,80,100,0.7))',
+          border: 'rgba(60,180,200,0.4)',
+          dateColor: '#0891b2',
+        }
+      }
       return {
         gradient: 'linear-gradient(135deg, rgba(14,116,144,0.65), rgba(6,78,59,0.5))',
         border: 'rgba(94,234,212,0.2)',

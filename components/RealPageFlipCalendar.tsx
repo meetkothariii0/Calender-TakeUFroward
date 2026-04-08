@@ -165,7 +165,92 @@ export default function RealPageFlipCalendar() {
         }}
       >
         {/* Theme Toggle - Top Right */}
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-between items-center mb-4">
+          {/* Month Navigation - Center */}
+          <div className="flex items-center gap-3 flex-1 justify-center">
+            {/* Previous Month Button */}
+            <button
+              onClick={handlePrevMonth}
+              disabled={isFlipping}
+              className="flex-shrink-0"
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
+                border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.18)' : '0.5px solid rgba(0, 0, 0, 0.15)',
+                backdropFilter: 'blur(6px)',
+                WebkitBackdropFilter: 'blur(6px)',
+                cursor: isFlipping ? 'not-allowed' : 'pointer',
+                opacity: isFlipping ? 0.5 : 1,
+                transition: 'background 0.2s',
+                color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.7)',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onMouseEnter={(e) => {
+                if (!isFlipping) (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.15)'
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'
+              }}
+              title="Previous month"
+            >
+              ←
+            </button>
+
+            {/* Month Label */}
+            <h2 
+              style={{
+                fontSize: '20px',
+                fontWeight: '600',
+                color: theme === 'dark' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)',
+                minWidth: '140px',
+                textAlign: 'center',
+              }}
+            >
+              {MONTHS[currentMonth]}
+            </h2>
+
+            {/* Next Month Button */}
+            <button
+              onClick={handleNextMonth}
+              disabled={isFlipping}
+              className="flex-shrink-0"
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
+                border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.18)' : '0.5px solid rgba(0, 0, 0, 0.15)',
+                backdropFilter: 'blur(6px)',
+                WebkitBackdropFilter: 'blur(6px)',
+                cursor: isFlipping ? 'not-allowed' : 'pointer',
+                opacity: isFlipping ? 0.5 : 1,
+                transition: 'background 0.2s',
+                color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.7)',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onMouseEnter={(e) => {
+                if (!isFlipping) (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.15)'
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'
+              }}
+              title="Next month"
+            >
+              →
+            </button>
+          </div>
+
+          {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
             style={{
@@ -230,103 +315,8 @@ export default function RealPageFlipCalendar() {
               overflowY: 'auto',
             }}
           >
-            {/* Month Navigation - Positioned on top of calendar */}
-            <div 
-              className="flex items-center justify-between absolute"
-              style={{
-                top: '12px',
-                left: '24px',
-                right: '24px',
-                zIndex: 10,
-              }}
-            >
-              {/* Month Navigation - Left side */}
-              <div className="flex items-center gap-3">
-                {/* Previous Month Button */}
-                <button
-                  onClick={handlePrevMonth}
-                  disabled={isFlipping}
-                  className="flex-shrink-0"
-                  style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)',
-                    border: theme === 'dark' ? '0.5px solid rgba(255, 255, 255, 0.18)' : '0.5px solid rgba(0, 0, 0, 0.1)',
-                    backdropFilter: 'blur(6px)',
-                    WebkitBackdropFilter: 'blur(6px)',
-                    cursor: isFlipping ? 'not-allowed' : 'pointer',
-                    opacity: isFlipping ? 0.5 : 1,
-                    transition: 'background 0.2s',
-                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.7)',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isFlipping) (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.1)'
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.target as HTMLButtonElement).style.background = theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)'
-                  }}
-                  title="Previous month"
-                >
-                  ←
-                </button>
-
-                {/* Month Label */}
-                <h2 
-                  style={{
-                    fontSize: '18px',
-                    fontWeight: '600',
-                    color: theme === 'dark' ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.85)',
-                    minWidth: '110px',
-                    textAlign: 'center',
-                  }}
-                >
-                  {MONTHS[currentMonth]}
-                </h2>
-
-                {/* Next Month Button */}
-                <button
-                  onClick={handleNextMonth}
-                  disabled={isFlipping}
-                  className="flex-shrink-0"
-                  style={{
-                    width: '28px',
-                    height: '28px',
-                    borderRadius: '50%',
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    border: '0.5px solid rgba(255, 255, 255, 0.18)',
-                    backdropFilter: 'blur(6px)',
-                    WebkitBackdropFilter: 'blur(6px)',
-                    cursor: isFlipping ? 'not-allowed' : 'pointer',
-                    opacity: isFlipping ? 0.5 : 1,
-                    transition: 'background 0.2s',
-                    color: 'rgba(255, 255, 255, 0.9)',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isFlipping) (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.16)'
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.08)'
-                  }}
-                  title="Next month"
-                >
-                  →
-                </button>
-              </div>
-            </div>
-
             {/* Calendar Grid */}
-            <div ref={calendarContainerRef} style={{ marginTop: '8px' }}>
+            <div ref={calendarContainerRef} style={{ marginTop: '0' }}>
               <CalendarGrid 
                 onOpenNotesModal={handleOpenNotesModal}
                 monthIndex={currentMonth}
