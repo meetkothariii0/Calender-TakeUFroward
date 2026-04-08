@@ -1,23 +1,17 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { Schibsted_Grotesk, Inter, Fustat } from 'next/font/google'
+import { Schibsted_Grotesk, Inter } from 'next/font/google'
 
 const schibstedGrotesk = Schibsted_Grotesk({
   subsets: ['latin'],
-  weights: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-schibsted-grotesk'
 })
 
 const inter = Inter({
   subsets: ['latin'],
-  weights: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-inter'
-})
-
-const fustat = Fustat({
-  subsets: ['latin'],
-  weights: ['400', '500', '600', '700'],
-  variable: '--font-fustat'
 })
 
 export const metadata: Metadata = {
@@ -31,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${schibstedGrotesk.variable} ${inter.variable} ${fustat.variable}`}>
+    <html lang="en" className={`${schibstedGrotesk.variable} ${inter.variable}`}>
       <body className="bg-garden-cream text-garden-text">
         {children}
       </body>

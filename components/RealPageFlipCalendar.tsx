@@ -86,31 +86,31 @@ export default function RealPageFlipCalendar() {
       <HeroBackground />
 
       {/* Calendar Overlay */}
-      <div className="absolute inset-0 z-20 w-full min-h-screen flex flex-col items-center justify-center p-lg gap-xl">
+      <div className="absolute inset-0 z-20 w-full min-h-screen flex flex-col items-center justify-center p-sm sm:p-md md:p-lg gap-md sm:gap-lg md:gap-xl">
         
         {/* Theme toggle button */}
         <button
           onClick={toggleTheme}
-          className={`absolute top-lg right-lg px-lg py-md rounded-full font-semibold text-sm transition-all shadow-lg ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : 'bg-slate-500/80 hover:bg-slate-400 text-white'}`}
+          className={`absolute top-sm right-sm sm:top-lg sm:right-lg px-md sm:px-lg py-xs sm:py-md rounded-full font-semibold text-xs sm:text-sm transition-all shadow-lg ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : 'bg-slate-500/80 hover:bg-slate-400 text-white'}`}
           title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
         >
           {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
         </button>
 
         {/* Month Navigation */}
-        <div className={`flex items-center justify-between gap-xl backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-xl py-lg rounded-full shadow-xl w-full max-w-2xl`}>
+        <div className={`flex items-center justify-between gap-sm sm:gap-lg md:gap-xl backdrop-blur-lg ${theme === 'dark' ? 'bg-slate-900/15' : 'bg-garden-cream/15'} px-sm sm:px-lg md:px-xl py-sm sm:py-lg md:py-lg rounded-full shadow-xl w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl`}>
           <button
             onClick={handlePrevMonth}
             disabled={isFlipping}
-            className={`px-xl py-md rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-lg font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
+            className={`px-md sm:px-lg md:px-xl py-xs sm:py-md md:py-md rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-base sm:text-lg md:text-xl font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
           >
             ←
           </button>
-          <h2 className={`text-4xl font-serif flex-1 text-center drop-shadow-lg ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{MONTHS[currentMonth]}</h2>
+          <h2 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif flex-1 text-center drop-shadow-lg ${theme === 'dark' ? 'text-white' : 'text-white'}`}>{MONTHS[currentMonth]}</h2>
           <button
             onClick={handleNextMonth}
             disabled={isFlipping}
-            className={`px-xl py-md rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-lg font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
+            className={`px-md sm:px-lg md:px-xl py-xs sm:py-md md:py-md rounded-full hover:opacity-90 disabled:opacity-50 transition-all font-sans text-base sm:text-lg md:text-xl font-semibold ${theme === 'dark' ? 'bg-white/80 hover:bg-white text-slate-900' : `${seasonalColors.button}`}`}
           >
             →
           </button>
@@ -118,7 +118,7 @@ export default function RealPageFlipCalendar() {
 
         {/* Calendar with glass blur effect */}
         <div
-          className={`rounded-2xl shadow-2xl overflow-hidden ${isFlipping ? `flip-${flipDirection}` : ''} border-0`}
+          className={`rounded-2xl shadow-2xl overflow-hidden ${isFlipping ? `flip-${flipDirection}` : ''} border-0 w-full sm:max-w-xs md:max-w-md lg:max-w-2xl`}
           style={{
             transformStyle: 'preserve-3d' as any,
             transform: isFlipping
@@ -128,8 +128,6 @@ export default function RealPageFlipCalendar() {
               : 'rotateY(0deg)',
             transformOrigin: 'center',
             transition: isFlipping ? 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'none',
-            width: '900px',
-            maxWidth: '95vw',
             background: 'rgba(255, 255, 255, 0.05)',
             backdropFilter: 'blur(4px)',
             border: '1px solid rgba(255, 255, 255, 0.3)',

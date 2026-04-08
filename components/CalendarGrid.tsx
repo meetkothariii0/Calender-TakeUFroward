@@ -198,14 +198,14 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
 
   return (
     <div 
-      className={`w-full bg-transparent p-xl`}
+      className={`w-full bg-transparent p-sm sm:p-md md:p-lg lg:p-xl`}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       {/* Selection indicator with notes button */}
       {startDate && (
-        <div className="mb-lg flex items-center gap-md">
-          <span className={`text-sm font-sans whitespace-nowrap ${theme === 'dark' ? 'text-white' : colors.text}`}>
+        <div className="mb-md sm:mb-lg flex items-center gap-md flex-wrap">
+          <span className={`text-xs sm:text-sm font-sans whitespace-nowrap ${theme === 'dark' ? 'text-white' : colors.text}`}>
             {endDate 
               ? `${MONTH_NAMES[monthIndex]} ${startDate}–${endDate}` 
               : `${MONTH_NAMES[monthIndex]} ${startDate}`
@@ -223,29 +223,19 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
       )}
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 gap-sm mb-sm">
+      <div className="grid grid-cols-7 gap-xs sm:gap-sm md:gap-md mb-xs sm:mb-sm md:mb-md">
         {DAYS_OF_WEEK.map((day) => (
           <div
             key={day}
-            className={`w-16 h-16 flex items-center justify-center relative rounded-full text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}
+            className={`h-8 sm:h-10 md:h-12 lg:h-14 flex items-center justify-center text-xs sm:text-sm font-semibold uppercase tracking-wider ${theme === 'dark' ? 'text-white' : 'text-slate-700'}`}
           >
-            {/* Glass circle background */}
-            <div 
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.15)',
-                backdropFilter: 'blur(10px)',
-                border: 'none',
-                boxShadow: theme === 'dark' ? 'inset 0 1px 2px rgba(255, 255, 255, 0.2)' : 'inset 0 1px 2px rgba(255, 255, 255, 0.3)'
-              }}
-            />
             <span className="relative z-10">{day}</span>
           </div>
         ))}
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-sm">
+      <div className="grid grid-cols-7 gap-xs sm:gap-sm md:gap-md">
         {calendarDays.map((day, index) => {
           const isWeekend = index % 7 >= 5
           const isToday = day === TODAY
@@ -260,76 +250,44 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
               onClick={() => day && handleDateClick(day)}
               disabled={!isClickable}
               className={`
-                w-16 h-16 flex items-center justify-center relative rounded-full text-base font-medium
+                h-8 sm:h-10 md:h-12 lg:h-14 flex items-center justify-center relative rounded text-base sm:text-lg font-bold
                 transition-all duration-quick bg-transparent border-0 outline-none
                 ${!isClickable ? 'cursor-default' : 'cursor-pointer'}
                 ${day === null ? 'pointer-events-none' : ''}
-                
                 ${!inRange && !isStart && !isEnd && day && !isPartOfRangeWithNotes(day)
-                  ? theme === 'dark' ? 'text-white hover:bg-white/5' : 'text-slate-900 hover:bg-slate-200 hover:bg-opacity-20'
+                  ? theme === 'dark' ? 'text-black hover:bg-white/5' : 'text-black hover:bg-slate-200 hover:bg-opacity-20'
                   : ''
                 }
               `}
             >
               {day && (
                 <>
-                  {/* Glass circle background for all dates */}
-                  <div 
-                    className="absolute inset-0 rounded-full"
-                    style={{
-                      background: isStart || isEnd 
-                        ? theme === 'dark' 
-                          ? 'rgba(255, 255, 255, 0.8)' 
-                          : 'rgba(90, 115, 138, 0.9)'
-                        : inRange && !isStart && !isEnd
-                        ? theme === 'dark'
-                          ? 'rgba(255, 255, 255, 0.4)'
-                          : 'rgba(90, 115, 138, 0.4)'
-                        : theme === 'dark' 
-                        ? 'rgba(255, 255, 255, 0.08)' 
-                        : 'rgba(255, 255, 255, 0.15)',
-                      backdropFilter: 'blur(10px)',
-                      border: 'none',
-                      boxShadow: (isStart || isEnd) 
-                        ? 'inset 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15)'
-                        : theme === 'dark' 
-                        ? 'inset 0 1px 2px rgba(255, 255, 255, 0.2)' 
-                        : 'inset 0 1px 2px rgba(255, 255, 255, 0.3)'
-                    }}
-                  />
-                  
-                  {/* Colored gradient circle for dates with notes */}
+                  {/* Colored gradient circle only for dates with notes */}
                   {(hasNotes(day) || isPartOfRangeWithNotes(day)) && (
-                    <div className="absolute inset-0 rounded-full flex items-center justify-center pointer-events-none">
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       {/* Outer rotating ring */}
                       <div 
                         className="absolute rounded-full animate-spin"
                         style={{
-                          width: '58px',
-                          height: '58px',
+                          width: 'calc(100% + 8px)',
+                          height: 'calc(100% + 8px)',
                           animationDuration: '4s',
                           backgroundImage: getGradientStyle(getColorForDate(day)),
-                          opacity: 0.8
-                        }}
-                      />
-                      {/* Inner glow */}
-                      <div 
-                        className="absolute rounded-full blur-sm"
-                        style={{
-                          width: '52px',
-                          height: '52px',
-                          backgroundImage: getGradientStyle(getColorForDate(day)),
-                          opacity: 0.4
+                          opacity: 0.8,
+                          borderRadius: '50%'
                         }}
                       />
                     </div>
                   )}
 
-                  <span className={`relative z-10 font-bold ${(isStart || isEnd) ? theme === 'dark' ? 'text-slate-900' : 'text-white' : inRange ? 'text-white' : (hasNotes(day) || isPartOfRangeWithNotes(day)) ? theme === 'dark' ? 'text-white drop-shadow-lg' : 'text-white drop-shadow-lg' : theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>{day}</span>
+                  {/* Day number in black */}
+                  <span className={`relative z-10 font-bold ${(hasNotes(day) || isPartOfRangeWithNotes(day)) ? theme === 'dark' ? 'text-white drop-shadow-lg' : 'text-white drop-shadow-lg' : 'text-black'}`}>
+                    {day}
+                  </span>
                   {(hasNotes(day) || isPartOfRangeWithNotes(day)) && (
                     <div
                       onClick={(e) => handleNoteClick(e, day)}
-                      className="absolute inset-0 z-20 rounded-full cursor-pointer opacity-0 hover:bg-white/5 transition-colors duration-quick"
+                      className="absolute inset-0 z-20 rounded cursor-pointer opacity-0 hover:bg-white/10 transition-colors duration-quick"
                       title="View notes"
                       role="button"
                     />
@@ -342,7 +300,7 @@ export default function CalendarGrid({ onOpenNotesModal, monthIndex, seasonalCol
       </div>
 
       {/* Info text */}
-      <div className={`mt-lg text-xs italic animate-fade-rise-delay ${theme === 'dark' ? 'text-white/90' : 'text-slate-800'}`}>
+      <div className={`mt-md sm:mt-lg text-xs sm:text-sm italic animate-fade-rise-delay ${theme === 'dark' ? 'text-white/90' : 'text-slate-800'}`}>
         {startDate ? 'Click the + icon to add notes' : 'Click dates to select a range'}
       </div>
     </div>

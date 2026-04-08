@@ -157,7 +157,7 @@ export default function HeroBackground() {
           <h1
             className="text-center mb-6 leading-none font-bold"
             style={{
-              fontFamily: 'Fustat',
+              fontFamily: 'Georgia, serif',
               fontSize: '80px',
               letterSpacing: '-4.8px',
               color: '#000000',
@@ -170,7 +170,7 @@ export default function HeroBackground() {
           <p
             className="text-center mb-12"
             style={{
-              fontFamily: 'Fustat',
+              fontFamily: 'Georgia, serif',
               fontSize: '20px',
               letterSpacing: '-0.4px',
               color: '#505050',
