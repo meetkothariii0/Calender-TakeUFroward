@@ -301,17 +301,15 @@ export default function RealPageFlipCalendar() {
             {/* Calendar Grid */}
             <div style={{ marginTop: '8px' }}>
               <AnimatedContent
-                distance={40}
+                distance={30}
                 direction="vertical"
                 reverse={false}
-                duration={0.6}
+                duration={0.5}
                 ease="power3.out"
-                initialOpacity={0.3}
+                initialOpacity={0.5}
                 animateOpacity
-                scale={0.95}
-                threshold={0.1}
-                delay={0.1}
-                key={currentMonth}
+                scale={0.98}
+                delay={0}
               >
                 <CalendarGrid 
                   onOpenNotesModal={handleOpenNotesModal}
@@ -336,17 +334,15 @@ export default function RealPageFlipCalendar() {
           >
             {/* Events Panel */}
             <AnimatedContent
-              distance={40}
+              distance={30}
               direction="horizontal"
               reverse={true}
-              duration={0.6}
+              duration={0.5}
               ease="power3.out"
-              initialOpacity={0.3}
+              initialOpacity={0.5}
               animateOpacity
-              scale={0.95}
-              threshold={0.1}
-              delay={0.2}
-              key={`events-${currentMonth}`}
+              scale={0.98}
+              delay={0.1}
             >
               <div
                 style={{
@@ -383,17 +379,15 @@ export default function RealPageFlipCalendar() {
 
             {/* Daily Habit Logger Panel */}
             <AnimatedContent
-              distance={40}
+              distance={30}
               direction="horizontal"
               reverse={true}
-              duration={0.6}
+              duration={0.5}
               ease="power3.out"
-              initialOpacity={0.3}
+              initialOpacity={0.5}
               animateOpacity
-              scale={0.95}
-              threshold={0.1}
-              delay={0.3}
-              key={`habits-${currentMonth}`}
+              scale={0.98}
+              delay={0.2}
             >
               <div>
                 <DailyHabitLogger theme={theme} />
